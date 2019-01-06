@@ -1,0 +1,42 @@
+buildscript {
+    ext.kotlin_version = '1.3.11'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'com.team1091'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = "com.team1091.sim.SimulationKt"
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+//    jcenter()
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile project(":shared")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'org.processing:core:3.3.7'
+    compile 'org.jbox2d:jbox2d-library:2.2.1.1'
+
+    compile 'com.github.WilliamAHartman:Jamepad:1.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
