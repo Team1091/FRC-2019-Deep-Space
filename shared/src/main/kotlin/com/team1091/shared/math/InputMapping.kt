@@ -43,7 +43,7 @@ fun squareACircle(u: Double, v: Double): Pair<Double, Double> {
     if (abs(v) <= 0.0001) {
         y = 0.0
     }
-  //  println("$x, $y")
+    //  println("$x, $y")
     // https://arxiv.org/pdf/1509.06344.pdf
     return Pair(x, y)
 }

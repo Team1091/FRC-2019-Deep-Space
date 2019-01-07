@@ -1,28 +1,28 @@
 package frc.robot.components;
 
 import com.team1091.shared.components.IAccelerometer;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
 public class WrappedAccelerometer implements IAccelerometer {
 
-    private final BuiltInAccelerometer builtInAccelerometer;
+    private final Accelerometer accelerometer;
 
-    public WrappedAccelerometer(BuiltInAccelerometer builtInAccelerometer) {
-        this.builtInAccelerometer = builtInAccelerometer;
+    public WrappedAccelerometer(Accelerometer accelerometer) {
+        this.accelerometer = accelerometer;
     }
 
     @Override
     public double getX() {
-        return builtInAccelerometer.getX();
+        return accelerometer.getX();
     }
 
     @Override
     public double getY() {
-        return builtInAccelerometer.getY();
+        return accelerometer.getY();
     }
 
     @Override
     public double getZ() {
-        return builtInAccelerometer.getZ();
+        return accelerometer.getZ();
     }
 }

@@ -4,6 +4,7 @@ import com.team1091.shared.components.IGyroscope;
 import com.team1091.shared.math.Rotation;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import org.jetbrains.annotations.NotNull;
 
 public class WrappedGyroscope implements IGyroscope {
 
@@ -18,6 +19,7 @@ public class WrappedGyroscope implements IGyroscope {
     }
 
     @Override
+    @NotNull
     public Rotation get() {
         return new Rotation(Math.toRadians(analogGyro.getAngle()));
     }

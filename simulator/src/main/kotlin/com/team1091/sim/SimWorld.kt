@@ -1,5 +1,6 @@
 package com.team1091.sim
 
+import com.team1091.shared.math.inches
 import com.team1091.shared.math.radians
 import com.team1091.sim.components.SimAccelerometer
 import com.team1091.sim.components.SimDrive
@@ -15,10 +16,9 @@ import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
 
-
 class SimWorld(
-        val fieldXSize: Double = 650.0,
-        val fieldYSize: Double = 320.0,
+        val fieldXSize: Double = 650.0.inches.toMeters(),
+        val fieldYSize: Double = 320.0.inches.toMeters(),
         val robots: Array<SimRobot>,
         val gamePieces: Array<GamePiece>, // gamePiece
         val obstacles: Array<Obstacle> // static walls
@@ -144,7 +144,7 @@ class SimWorld(
                     robots.forEach { it.teamRobot.disabledInit() }
                 }
             }
-            Period.DISABLED -> return
+            Period.DISABLED -> Unit
         }
 
         for (robot in robots) {
@@ -182,15 +182,13 @@ class SimWorld(
         for (robot in robots) {
             with(robot) {
 
-                val lEncode = (rc.leftEncoder as SimEncoder)
-                val rEncode = (rc.rightEncoder as SimEncoder)
-
                 val v = body.linearVelocity.length()
                 val rv = body.angularVelocity
 
+                val lEncode = (rc.leftEncoder as SimEncoder)
+                val rEncode = (rc.rightEncoder as SimEncoder)
                 lEncode.rotation += (v + rv * lEncode.rotDist) * dt
                 rEncode.rotation += (v + rv * rEncode.rotDist) * dt
-
 
             }
         }
