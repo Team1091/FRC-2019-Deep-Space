@@ -20,14 +20,14 @@ private val imageInfo = ImageInfo()
 private val gson = Gson()
 
 fun main(args: Array<String>) {
-    if (args.size != 1) {
-        //Webcam.setDriver(IpCamDriver())
-        // IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
-    }
+//    if (args.size != 1) {
+    Webcam.setDriver(IpCamDriver())
+    IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
+//    }
 
     val webcams = Webcam.getWebcams()
     val webcam = webcams[webcams.size - 1]
-//    webcam.setCustomViewSizes(Dimension(1440, 900))
+    webcam.setCustomViewSizes(Dimension(640, 480))
     webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
     //var lastSample = Clock.systemUTC().millis();
@@ -42,18 +42,18 @@ fun main(args: Array<String>) {
             //var lastTime = lastSample;
             //var now = Clock.systemUTC().millis()
             //if (now > lastTime + 500) {
-                val targetingOutput = process(image)
+            val targetingOutput = process(image)
 
-                // pull out results we care about, let web server serve them as quick as possible
-                imageInfo.yellow = targetingOutput.yellowCenter;
-                imageInfo.yellowDistance = targetingOutput.yellowDistance;
+            // pull out results we care about, let web server serve them as quick as possible
+            imageInfo.yellow = targetingOutput.yellowCenter;
+            imageInfo.yellowDistance = targetingOutput.yellowDistance;
 
-                imageInfo.red = targetingOutput.redCenter;
-                imageInfo.redDistance = targetingOutput.redDistance;
+            imageInfo.red = targetingOutput.redCenter;
+            imageInfo.redDistance = targetingOutput.redDistance;
 
-                imageInfo.blue = targetingOutput.blueCenter;
-                imageInfo.blueDistance = targetingOutput.blueDistance;
-                writeToPanel(panel, g2, targetingOutput)
+            imageInfo.blue = targetingOutput.blueCenter;
+            imageInfo.blueDistance = targetingOutput.blueDistance;
+            writeToPanel(panel, g2, targetingOutput)
             //    lastSample = Clock.systemUTC().millis()
             //    return;
             //}
