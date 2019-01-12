@@ -27,8 +27,8 @@ fun main(args: Array<String>) {
 
     val webcams = Webcam.getWebcams()
     val webcam = webcams[webcams.size - 1]
-    webcam.setCustomViewSizes(Dimension(1440, 900))
-    webcam.viewSize = Dimension(1440, 900)
+//    webcam.setCustomViewSizes(Dimension(1440, 900))
+    webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
     //var lastSample = Clock.systemUTC().millis();
 
@@ -187,26 +187,26 @@ fun process(inputImage: BufferedImage): TargetingOutput {
 
             val yellow = Math.min(r, g) * (1 - b) // TODO: find a function to find yellowness
 
-            if (yellow > .35) { //was 10
-                outputImage.setRGB(x, y, Color.YELLOW.rgb)
+            if (g > .50 && g > b + 0.1 && g > r + 0.1) { //was 10
+                outputImage.setRGB(x, y, Color.GREEN.rgb)
                 xSumY += x.toLong()
                 ySumY += y.toLong()
                 totalCountY++
 
-            } else if (r > 0.5 && r > b + 0.18 && r > g + 0.18) {
-                // its Red
-                outputImage.setRGB(x, y, Color.RED.rgb)
-                xSumR += x.toLong()
-                ySumR += y.toLong()
-                totalCountR++
-
-            } else if (b > 0.5 && b > r + 0.18 && b > g + 0.18) {
-                outputImage.setRGB(x, y, Color.BLUE.rgb)
-                // its blue
-                xSumB += x.toLong()
-                ySumB += y.toLong()
-                totalCountB++
-
+//            } else if (r > 0.5 && r > b + 0.18 && r > g + 0.18) {
+//                // its Red
+//                outputImage.setRGB(x, y, Color.RED.rgb)
+//                xSumR += x.toLong()
+//                ySumR += y.toLong()
+//                totalCountR++
+//
+////            } else if (b > 0.5 && b > r + 0.18 && b > g + 0.18) {
+////                outputImage.setRGB(x, y, Color.BLUE.rgb)
+////                // its blue
+////                xSumB += x.toLong()
+////                ySumB += y.toLong()
+////                totalCountB++
+//
             } else {
                 outputImage.setRGB(x, y, inputImage.getRGB(x, y))
             }
