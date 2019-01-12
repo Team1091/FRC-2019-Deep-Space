@@ -2,12 +2,11 @@ package com.team1091.shared.math
 
 import kotlin.math.abs
 
-fun squareACircle(u: Double, v: Double): Pair<Double, Double> {
+fun squareACircle(u: Double, v: Double, pressed: Boolean): Pair<Double, Double> {
     var x = 0.0
     var y = 0.0
     var u2v2 = Math.pow(u, 2.0) + Math.pow(v, 2.0)
-    val stretchType = 1 //Stretch type 1 is currently functional, the others may not work.
-    if (stretchType == 1) {
+    if (pressed) {
         var unchangedEquation = Math.sqrt(u2v2)
         if (Math.pow(u, 2.0) >= Math.pow(v, 2.0)) {
             x = Math.signum(u) * unchangedEquation
@@ -19,21 +18,7 @@ fun squareACircle(u: Double, v: Double): Pair<Double, Double> {
         } else {
             y = Math.signum(v) * unchangedEquation
         }
-        /*
-    } else if (stretchType == 2) {
-        var unchangedEquation = Math.sqrt(
-                u2v2 - Math.sqrt(
-                        u2v2 * (u2v2 - (4 * Math.pow(u, 2.0) * Math.pow(v, 2.0)))
-                )
-        )
-        x = Math.signum(u * v) / (v * Math.sqrt(2.0)) * unchangedEquation
-        y = Math.signum(u * v) / (u * Math.sqrt(2.0)) * unchangedEquation
-    } else if (stretchType == 3) {
-        x = .5 * Math.sqrt(
-                2 + Math.pow(u, 2.0) - Math.pow(v, 2.0) + 2 * Math.sqrt(2.0) * u
-        )
-        */
-    } else if (stretchType == 4) {
+    } else {
         x = u
         y = v
     }

@@ -61,7 +61,8 @@ class TeamRobotImpl(
 
         val (x, y) = squareACircle(
                 components.gameController.getLeftX(),
-                components.gameController.getLeftY()
+                components.gameController.getLeftY(),
+                components.gameController.getStart()
         )
 
         components.drive.arcadeDrive(y, x)
