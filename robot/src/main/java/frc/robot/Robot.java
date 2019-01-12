@@ -4,6 +4,8 @@ import com.team1091.shared.control.RobotComponents;
 import com.team1091.shared.control.TeamRobot;
 import com.team1091.shared.control.TeamRobotImpl;
 import com.team1091.shared.game.StartingPos;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
@@ -43,7 +45,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-
+        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        camera.setExposureAuto();
         // TODO: get this from the field or dropdown
         StartingPos pos = StartingPos.BLUE_1;
         teamRobot.robotInit(pos);

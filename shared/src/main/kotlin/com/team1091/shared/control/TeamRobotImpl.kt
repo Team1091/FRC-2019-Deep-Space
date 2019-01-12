@@ -14,6 +14,7 @@ class TeamRobotImpl(
         val components: RobotComponents
 ) : TeamRobot {
 
+    var toggle = true
 
     private val autonomousSystem = AutonomousSystem()
 
@@ -62,10 +63,19 @@ class TeamRobotImpl(
         val (x, y) = squareACircle(
                 components.gameController.getLeftX(),
                 components.gameController.getLeftY(),
-                components.gameController.getStart()
+                pressStartToggle()
         )
 
         components.drive.arcadeDrive(y, x)
+    }
+
+    fun pressStartToggle():Boolean
+    {
+        if(components.gameController.getStart())
+        {
+            toggle= !toggle
+        }
+        return toggle
     }
 
     override fun disabledInit() {

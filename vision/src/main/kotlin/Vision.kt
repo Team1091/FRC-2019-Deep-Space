@@ -19,18 +19,18 @@ private val imageInfo = ImageInfo()
 
 private val gson = Gson()
 
-fun main(args: Array<String>){
-    if (args.size !== 1) {
+fun main(args: Array<String>) {
+    if (args.size != 1) {
         //Webcam.setDriver(IpCamDriver())
         // IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
     }
 
     val webcams = Webcam.getWebcams()
     val webcam = webcams[webcams.size - 1]
-    webcam.customViewSizes =  Array<Dimension>(1) { Dimension(1440,900) };
-    webcam.viewSize = Dimension(1440,900)
+    webcam.setCustomViewSizes(Dimension(1440, 900))
+    webcam.viewSize = Dimension(1440, 900)
     val panel = WebcamPanel(webcam)
-    var lastSample = Clock.systemUTC().millis();
+    //var lastSample = Clock.systemUTC().millis();
 
     panel.painter = object : WebcamPanel.Painter {
         override fun paintPanel(panel: WebcamPanel, g2: Graphics2D) {
@@ -39,9 +39,9 @@ fun main(args: Array<String>){
 
         override fun paintImage(panel: WebcamPanel, image: BufferedImage, g2: Graphics2D) {
 
-            var lastTime = lastSample;
-            var now = Clock.systemUTC().millis()
-            if(now > lastTime + 500){
+            //var lastTime = lastSample;
+            //var now = Clock.systemUTC().millis()
+            //if (now > lastTime + 500) {
                 val targetingOutput = process(image)
 
                 // pull out results we care about, let web server serve them as quick as possible
@@ -54,19 +54,19 @@ fun main(args: Array<String>){
                 imageInfo.blue = targetingOutput.blueCenter;
                 imageInfo.blueDistance = targetingOutput.blueDistance;
                 writeToPanel(panel, g2, targetingOutput)
-                lastSample = Clock.systemUTC().millis()
-                return;
-            }
+            //    lastSample = Clock.systemUTC().millis()
+            //    return;
+            //}
 
-            writeToPanelFast(panel, g2, image)
+            //writeToPanelFast(panel, g2, image)
         }
 
-        private fun writeToPanelFast(panel: WebcamPanel, g2: Graphics2D, image: BufferedImage) {
+        private fun writeToPanelFast(panel: WebcamPanel, g2: Graphics2D, image: BufferedImage?) {
 
             // Draw our results onto the image, so that the driver can see if the autonomous code is tracking
             val outImage = image
 
-            if(outImage == null){
+            if (outImage == null) {
                 throw Exception("Failed!");
             }
 
@@ -103,7 +103,7 @@ fun main(args: Array<String>){
             // Draw our results onto the image, so that the driver can see if the autonomous code is tracking
             val outImage = targetingOutput.drawOntoImage(targetingOutput.processedImage)
 
-            if(outImage == null){
+            if (outImage == null) {
                 throw Exception("Failed!");
             }
 
@@ -160,29 +160,30 @@ fun process(inputImage: BufferedImage): TargetingOutput {
     for (x in 0 until inputImage.width) {
         for (y in 0 until inputImage.height) {
 
-            var pixel = 0
-            var red = 0
-            var green = 0
-            var blue = 0
 
-            for (ix in x - radius..x + radius) {
-                for (iy in y - radius..y + radius) {
+//            var pixel = 0
+//            var red = 0
+//            var green = 0
+//            var blue = 0
 
-                    if (ix < 0 || iy < 0 || ix >= inputImage.width || iy >= inputImage.height)
-                        continue
-
-                    val rgb = Color(inputImage.getRGB(ix, iy))
-                    red += Math.pow(rgb.red.toDouble(), 2.0).toInt()
-                    green += Math.pow(rgb.green.toDouble(), 2.0).toInt()
-                    blue += Math.pow(rgb.blue.toDouble(), 2.0).toInt()
-                    pixel++
-
-                }
-            }
-
-            val r = Math.sqrt((red / pixel).toDouble()) / 255.0
-            val g = Math.sqrt((green / pixel).toDouble()) / 255.0
-            val b = Math.sqrt((blue / pixel).toDouble()) / 255.0
+//            for (ix in x - radius..x + radius) {
+//                for (iy in y - radius..y + radius) {
+//
+//                    if (ix < 0 || iy < 0 || ix >= inputImage.width || iy >= inputImage.height)
+//                        continue
+//
+//                    val rgb = Color(inputImage.getRGB(ix, iy))
+//                    red += Math.pow(rgb.red.toDouble(), 2.0).toInt()
+//                    green += Math.pow(rgb.green.toDouble(), 2.0).toInt()
+//                    blue += Math.pow(rgb.blue.toDouble(), 2.0).toInt()
+//                    pixel++
+//
+//                }
+//            }
+            val rgb = Color(inputImage.getRGB(x, y))
+            val r = rgb.red.toFloat() / 255f //Math.sqrt((red / pixel).toDouble()) / 255.0
+            val g = rgb.green.toFloat() / 255f //Math.sqrt((green / pixel).toDouble()) / 255.0
+            val b = rgb.blue.toFloat() / 255f //Math.sqrt((blue / pixel).toDouble()) / 255.0
 
             val yellow = Math.min(r, g) * (1 - b) // TODO: find a function to find yellowness
 
@@ -308,7 +309,7 @@ class TargetingOutput {
     fun drawOntoImage(outputImage: BufferedImage?): BufferedImage? {
 
         val g = outputImage?.createGraphics()
-        if(g == null){
+        if (g == null) {
             return null
         }
 
