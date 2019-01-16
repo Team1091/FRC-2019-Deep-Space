@@ -1,19 +1,16 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.team1091.shared.control.RobotComponents;
 import com.team1091.shared.control.TeamRobot;
 import com.team1091.shared.control.TeamRobotImpl;
 import com.team1091.shared.game.StartingPos;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
-import frc.robot.components.WrappedAccelerometer;
-import frc.robot.components.WrappedDrive;
-import frc.robot.components.WrappedEncoder;
-import frc.robot.components.WrappedGyroscope;
-import frc.robot.components.WrappedXBox;
+import frc.robot.components.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,8 +21,10 @@ import frc.robot.components.WrappedXBox;
  */
 public class Robot extends TimedRobot {
     private final TeamRobot teamRobot;
+    public AHRS accel;
 
     Robot() {
+        accel = new AHRS(SerialPort.Port.kUSB);
         // create real components wrapped and send them to the other project
         // then delegate to our shared code
         teamRobot = new TeamRobotImpl(
@@ -37,8 +36,8 @@ public class Robot extends TimedRobot {
                         ),
                         new WrappedEncoder(3, 4),
                         new WrappedEncoder(5, 6),
-                        new WrappedAccelerometer(new BuiltInAccelerometer()),
-                        new WrappedGyroscope(0)
+                        new WrappedAccelerometer(accel),
+                        new WrappedGyroscope(accel)
                 )
         );
     }
