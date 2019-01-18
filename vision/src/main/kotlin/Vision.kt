@@ -35,13 +35,13 @@ fun main(args: Array<String>) {
         }
 
         override fun paintImage(panel: WebcamPanel, image: BufferedImage, g2: Graphics2D) {
-            var imageToUse = if (testImage != null) ImageIO.read(File(testImage)) else image
+            val imageToUse = if (testImage != null) ImageIO.read(File(testImage)) else image
 
             val targetingOutput = process(Color.GREEN, imageToUse)
 
             // pull out results we care about, let web server serve them as quick as possible
-            imageInfo.color = targetingOutput.targetCenter;
-            imageInfo.distance = targetingOutput.targetDistance;
+            imageInfo.color = targetingOutput.targetCenter
+            imageInfo.distance = targetingOutput.targetDistance
 
             writeToPanel(panel, g2, targetingOutput)
         }
@@ -57,12 +57,8 @@ fun main(args: Array<String>) {
             // Draw our results onto the image, so that the driver can see if the autonomous code is tracking
             val outImage = targetingOutput.drawOntoImage(Color.RED, targetingOutput.processedImage)
 
-            if (outImage == null) {
-                throw Exception("Failed!");
-            }
-
-            val imageX = outImage.getWidth()
-            val imageY = outImage.getHeight()
+            val imageX = outImage.width
+            val imageY = outImage.height
 
             val imageAspectRatio = imageX.toFloat() / imageY.toFloat()
 
@@ -139,11 +135,11 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     * distance(mm) = (focal length (mm) * real height of the object (mm) * camera frame height in device (pixels) ) / ( image height (pixels) * sensor height (mm))
     * */
     //In Millimeters - Vaues for C270 web cam
-    val focalLength = 4.2;
-    val targetPhysicalHeight = 133.35; //5.25in
-    val cameraFrameHeight = inputImage.height;
-    val cameraSensorHeight = 2.2;
-    val targetPixelHeight = 45; //How to get?
+    val focalLength = 4.2
+    val targetPhysicalHeight = 133.35 //5.25in
+    val cameraFrameHeight = inputImage.height
+    val cameraSensorHeight = 2.2
+    val targetPixelHeight = 45 //How to get?
 
     return TargetingOutput(
             imageWidth = inputImage.width,
@@ -175,7 +171,7 @@ class TargetingOutput(
 
 
     val targetDistanceInches: Double
-        get() = targetDistance / 25.4;
+        get() = targetDistance / 25.4
 
     /**
      * This draws debug info onto the image before it's displayed.
@@ -183,7 +179,7 @@ class TargetingOutput(
      * @param outputImage
      * @return
      */
-    fun drawOntoImage(drawColor: Color, outputImage: BufferedImage): BufferedImage? {
+    fun drawOntoImage(drawColor: Color, outputImage: BufferedImage): BufferedImage {
 
         val g = outputImage.createGraphics()
 
@@ -191,7 +187,7 @@ class TargetingOutput(
         g.drawLine(xCenterColor, yCenterColor - 10, xCenterColor, yCenterColor + 10)
 
         // width labels, px and % screen width
-        g.drawString(df.format(targetDistanceInches) + " Inches", xCenterColor, yCenterColor - 25);
+        g.drawString(df.format(targetDistanceInches) + " Inches", xCenterColor, yCenterColor - 25)
 
         //g.drawLine(outputImage.getWidth() / 2, yCenterYellow + 20, calcXCenter, yCenterYellow + 20);
         return outputImage
