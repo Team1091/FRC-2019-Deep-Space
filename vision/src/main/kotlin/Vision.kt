@@ -1,26 +1,21 @@
 import com.github.sarxos.webcam.Webcam
 import com.github.sarxos.webcam.WebcamPanel
-import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
-import com.github.sarxos.webcam.ds.ipcam.IpCamDriver
-import com.github.sarxos.webcam.ds.ipcam.IpCamMode
-
-import java.awt.image.BufferedImage
-import java.awt.Graphics2D
-import java.awt.Color
-import javax.swing.WindowConstants
-import javax.swing.JFrame
-import java.text.DecimalFormat
 import com.google.gson.Gson
+import spark.Spark.get
+import java.awt.Color
 import java.awt.Dimension
+import java.awt.Graphics2D
+import java.awt.image.BufferedImage
 import java.io.File
-import java.lang.Exception
-import java.time.Clock
+import java.text.DecimalFormat
 import javax.imageio.ImageIO
+import javax.swing.JFrame
+import javax.swing.WindowConstants
 
 private val imageInfo = ImageInfo()
 
 private val gson = Gson()
-private val testImage:String? = null//"C:\\WIP\\Assets\\ReflectorDistance1.jpg"
+private val testImage: String? = null//"C:\\WIP\\Assets\\ReflectorDistance1.jpg"
 
 fun main(args: Array<String>) {
 //    if (args.size != 1) {
@@ -51,7 +46,7 @@ fun main(args: Array<String>) {
             writeToPanel(panel, g2, targetingOutput)
         }
 
-                /**
+        /**
          * Writes an image onto the panel, and deals with stretching it while keeping aspect ratio
          * @param panel
          * @param g2
@@ -94,6 +89,10 @@ fun main(args: Array<String>) {
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     window.pack()
     window.isVisible = true
+
+    // a little webserver.  Go to http://localhost:4567/center
+    get("/center") { _, _ -> gson.toJson(imageInfo) }
+
 }
 
 fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
@@ -136,13 +135,6 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
         yCenter = (ySum / totalCount).toInt()
     }
 
-    val targetingOutput = TargetingOutput()
-    targetingOutput.imageWidth = inputImage.width
-    targetingOutput.imageHeight = inputImage.height
-
-    targetingOutput.xCenterColor = xCenter
-    targetingOutput.yCenterColor = yCenter
-
     /*
     * distance(mm) = (focal length (mm) * real height of the object (mm) * camera frame height in device (pixels) ) / ( image height (pixels) * sensor height (mm))
     * */
@@ -153,21 +145,25 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     val cameraSensorHeight = 2.2;
     val targetPixelHeight = 45; //How to get?
 
-    targetingOutput.targetDistance = (focalLength * targetPhysicalHeight * cameraFrameHeight ) / ( targetPixelHeight * cameraSensorHeight)
-
-    targetingOutput.processedImage = outputImage
-    return targetingOutput
+    return TargetingOutput(
+            imageWidth = inputImage.width,
+            imageHeight = inputImage.height,
+            xCenterColor = xCenter,
+            yCenterColor = yCenter,
+            targetDistance = (focalLength * targetPhysicalHeight * cameraFrameHeight) / (targetPixelHeight * cameraSensorHeight),
+            processedImage = outputImage
+    )
 }
 
-class TargetingOutput {
+class TargetingOutput(
+        val imageWidth: Int,
+        val imageHeight: Int,
+        val xCenterColor: Int,
+        val yCenterColor: Int,
+        var targetDistance: Double,
+        val processedImage: BufferedImage
+) {
 
-    var imageWidth: Int = 0
-    var imageHeight: Int = 0
-
-    var xCenterColor: Int = 0
-    var yCenterColor: Int = 0
-
-    var processedImage: BufferedImage? = null
 
     /**
      * Get the center as a fraction of total image width
@@ -177,28 +173,25 @@ class TargetingOutput {
     val targetCenter: Double
         get() = xCenterColor.toDouble() / imageWidth.toDouble() - 0.5
 
-    var targetDistance: Double = 0.0
 
     val targetDistanceInches: Double
-            get() = targetDistance / 25.4;
+        get() = targetDistance / 25.4;
+
     /**
      * This draws debug info onto the image before it's displayed.
      *
      * @param outputImage
      * @return
      */
-    fun drawOntoImage(drawColor: Color, outputImage: BufferedImage?): BufferedImage? {
+    fun drawOntoImage(drawColor: Color, outputImage: BufferedImage): BufferedImage? {
 
-        val g = outputImage?.createGraphics()
-        if (g == null) {
-            return null
-        }
+        val g = outputImage.createGraphics()
 
         g.color = drawColor
         g.drawLine(xCenterColor, yCenterColor - 10, xCenterColor, yCenterColor + 10)
 
         // width labels, px and % screen width
-        g.drawString(targetDistanceInches.toString() + " Inches", xCenterColor, yCenterColor - 25);
+        g.drawString(df.format(targetDistanceInches) + " Inches", xCenterColor, yCenterColor - 25);
 
         //g.drawLine(outputImage.getWidth() / 2, yCenterYellow + 20, calcXCenter, yCenterYellow + 20);
         return outputImage
