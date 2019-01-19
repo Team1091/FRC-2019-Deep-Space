@@ -1,5 +1,8 @@
 import com.github.sarxos.webcam.Webcam
 import com.github.sarxos.webcam.WebcamPanel
+import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
+import com.github.sarxos.webcam.ds.ipcam.IpCamDriver
+import com.github.sarxos.webcam.ds.ipcam.IpCamMode
 import com.google.gson.Gson
 import spark.Spark.get
 import java.awt.Color
@@ -18,13 +21,16 @@ private val gson = Gson()
 private val testImage: String? = null//"C:\\WIP\\Assets\\ReflectorDistance1.jpg"
 
 fun main(args: Array<String>) {
-//    if (args.size != 1) {
-//    Webcam.setDriver(IpCamDriver())
-//    IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
-//    }
+
+    if (args.size == 1) {
+        Webcam.setDriver(IpCamDriver())
+        IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
+    }
 
     val webcams = Webcam.getWebcams()
-    val webcam = webcams[webcams.size - 1]
+    webcams.map { it.name }.forEachIndexed { i, cam -> println("$i: $cam") }
+
+    val webcam = webcams.first()
     webcam.setCustomViewSizes(Dimension(640, 480))
     webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
@@ -102,21 +108,25 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     var ySum: Long = 0
     var totalCount = 0
 
+    // critical code, run on every pixel, every frame
     for (x in 0 until inputImage.width) {
         for (y in 0 until inputImage.height) {
 
-            val rgb = Color(inputImage.getRGB(x, y))
-            val r = rgb.red.toFloat() / 255f //Math.sqrt((red / pixel).toDouble()) / 255.0
-            val g = rgb.green.toFloat() / 255f //Math.sqrt((green / pixel).toDouble()) / 255.0
-            val b = rgb.blue.toFloat() / 255f //Math.sqrt((blue / pixel).toDouble()) / 255.0
+            val rgb = inputImage.getRGB(x, y)
 
-            if (g > .50 && g > b + 0.1 && g > r + 0.1) { //was 10
+            // Extract color channels 0-255.
+            val r = rgb shr 16 and 0x000000FF
+            val g = rgb shr 8 and 0x000000FF
+            val b = rgb and 0x000000FF
+
+            if (g > 128 && g > b + 20 && g > r + 20) { //was 10
                 outputImage.setRGB(x, y, targetColor.rgb)
                 xSum += x.toLong()
                 ySum += y.toLong()
                 totalCount++
+
             } else {
-                outputImage.setRGB(x, y, inputImage.getRGB(x, y))
+                outputImage.setRGB(x, y, rgb)
             }
         }
     }
