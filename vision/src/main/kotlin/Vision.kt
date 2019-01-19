@@ -149,8 +149,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
 
         // left
         for (x in (xCenter downTo 0)) {
-            val g = outputImage.getRGB(x, yCenter) shr 8 and 0x000000FF
-            if (g >= 255) {
+            if (outputImage.getRGB(x, yCenter) == Color.green.rgb) {
                 leftExtension = xCenter - x
                 break
             }
@@ -158,8 +157,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
 
         // right
         for (x in xCenter until inputImage.width) {
-            val g = outputImage.getRGB(x, yCenter) shr 8 and 0x000000FF
-            if (g >= 255) {
+            if (outputImage.getRGB(x, yCenter) == Color.green.rgb) {
                 rightExtension = x - xCenter
                 break
             }
@@ -236,12 +234,12 @@ class TargetingOutput(
         if (seen) {
             g.color = Color.YELLOW
             g.drawLine(xCenterColor - leftExtension, yCenterColor, xCenterColor + rightExtension, yCenterColor)
-        }
-        // width labels, px and % screen width
-        g.color = Color.BLUE
-        g.drawString(df.format(targetDistanceInches) + " Inches", 10, 10)
 
-        //g.drawLine(outputImage.getWidth() / 2, yCenterYellow + 20, calcXCenter, yCenterYellow + 20);
+            // width labels, px and % screen width
+            g.color = Color.BLUE
+            g.drawString(df.format(targetDistanceInches) + " Inches", 10, 10)
+        }
+
         return outputImage
     }
 
