@@ -3,34 +3,37 @@ import com.github.sarxos.webcam.WebcamPanel
 import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode
-
-import java.awt.image.BufferedImage
-import java.awt.Graphics2D
-import java.awt.Color
-import javax.swing.WindowConstants
-import javax.swing.JFrame
-import java.text.DecimalFormat
 import com.google.gson.Gson
+import spark.Spark.get
+import java.awt.Color
 import java.awt.Dimension
-import java.lang.Exception
-import java.time.Clock
+import java.awt.Graphics2D
+import java.awt.image.BufferedImage
+import java.io.File
+import java.text.DecimalFormat
+import javax.imageio.ImageIO
+import javax.swing.JFrame
+import javax.swing.WindowConstants
 
 private val imageInfo = ImageInfo()
 
 private val gson = Gson()
+private val testImage: String? = null // "test.png"
 
 fun main(args: Array<String>) {
-//    if (args.size != 1) {
-    Webcam.setDriver(IpCamDriver())
-    IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
-//    }
+
+    if (args.size == 1) {
+        Webcam.setDriver(IpCamDriver())
+        IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
+    }
 
     val webcams = Webcam.getWebcams()
-    val webcam = webcams[webcams.size - 1]
+    webcams.map { it.name }.forEachIndexed { i, cam -> println("$i: $cam") }
+
+    val webcam = webcams.first()
     webcam.setCustomViewSizes(Dimension(640, 480))
     webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
-    //var lastSample = Clock.systemUTC().millis();
 
     panel.painter = object : WebcamPanel.Painter {
         override fun paintPanel(panel: WebcamPanel, g2: Graphics2D) {
@@ -38,58 +41,15 @@ fun main(args: Array<String>) {
         }
 
         override fun paintImage(panel: WebcamPanel, image: BufferedImage, g2: Graphics2D) {
+            val imageToUse = if (testImage != null) ImageIO.read(File(testImage)) else image
 
-            //var lastTime = lastSample;
-            //var now = Clock.systemUTC().millis()
-            //if (now > lastTime + 500) {
-            val targetingOutput = process(image)
+            val targetingOutput = process(Color.GREEN, imageToUse)
 
             // pull out results we care about, let web server serve them as quick as possible
-            imageInfo.yellow = targetingOutput.yellowCenter;
-            imageInfo.yellowDistance = targetingOutput.yellowDistance;
+            imageInfo.color = targetingOutput.targetCenter
+            imageInfo.distance = targetingOutput.targetDistance
 
-            imageInfo.red = targetingOutput.redCenter;
-            imageInfo.redDistance = targetingOutput.redDistance;
-
-            imageInfo.blue = targetingOutput.blueCenter;
-            imageInfo.blueDistance = targetingOutput.blueDistance;
             writeToPanel(panel, g2, targetingOutput)
-            //    lastSample = Clock.systemUTC().millis()
-            //    return;
-            //}
-
-            //writeToPanelFast(panel, g2, image)
-        }
-
-        private fun writeToPanelFast(panel: WebcamPanel, g2: Graphics2D, image: BufferedImage?) {
-
-            // Draw our results onto the image, so that the driver can see if the autonomous code is tracking
-            val outImage = image
-
-            if (outImage == null) {
-                throw Exception("Failed!");
-            }
-
-            val imageX = outImage.getWidth()
-            val imageY = outImage.getHeight()
-
-            val imageAspectRatio = imageX.toFloat() / imageY.toFloat()
-
-            val panelX = panel.width
-            val panelY = panel.height
-
-            val screenAspectRatio = panelX.toFloat() / panelY.toFloat()
-
-            if (imageAspectRatio < screenAspectRatio) {
-                // wide screen - y to the max
-                val scaledImageX = (panelY * imageAspectRatio).toInt()
-                g2.drawImage(outImage, (panelX - scaledImageX) / 2, 0, scaledImageX, panelY, null)
-
-            } else {
-                // tall screen - x to the max
-                val scaledImageY = (panelX / imageAspectRatio).toInt()
-                g2.drawImage(outImage, 0, (panelY - scaledImageY) / 2, panelX, scaledImageY, null)
-            }
         }
 
         /**
@@ -101,14 +61,10 @@ fun main(args: Array<String>) {
         private fun writeToPanel(panel: WebcamPanel, g2: Graphics2D, targetingOutput: TargetingOutput) {
 
             // Draw our results onto the image, so that the driver can see if the autonomous code is tracking
-            val outImage = targetingOutput.drawOntoImage(targetingOutput.processedImage)
+            val outImage = targetingOutput.drawOntoImage(Color.RED, targetingOutput.processedImage)
 
-            if (outImage == null) {
-                throw Exception("Failed!");
-            }
-
-            val imageX = outImage.getWidth()
-            val imageY = outImage.getHeight()
+            val imageX = outImage.width
+            val imageY = outImage.height
 
             val imageAspectRatio = imageX.toFloat() / imageY.toFloat()
 
@@ -135,170 +91,134 @@ fun main(args: Array<String>) {
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     window.pack()
     window.isVisible = true
+
+    // a little webserver.  Go to http://localhost:4567/center
+    get("/center") { _, _ -> gson.toJson(imageInfo) }
+
 }
 
-fun process(inputImage: BufferedImage): TargetingOutput {
+fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
 
     val outputImage = BufferedImage(
             inputImage.width, inputImage.height,
             BufferedImage.TYPE_INT_RGB
     )
 
-    val radius = 1
-    var xSumY: Long = 0
-    var ySumY: Long = 0
-    var totalCountY = 0
+    var xSum: Long = 0
+    var ySum: Long = 0
+    var totalCount = 0
 
-    var xSumR: Long = 0
-    var ySumR: Long = 0
-    var totalCountR = 0
-
-    var xSumB: Long = 0
-    var ySumB: Long = 0
-    var totalCountB = 0
-
+    // critical code, run on every pixel, every frame
     for (x in 0 until inputImage.width) {
         for (y in 0 until inputImage.height) {
 
+            val rgb = inputImage.getRGB(x, y)
 
-//            var pixel = 0
-//            var red = 0
-//            var green = 0
-//            var blue = 0
+            // Extract color channels 0-255.
+            val r = rgb shr 16 and 0x000000FF
+            val g = rgb shr 8 and 0x000000FF
+            val b = rgb and 0x000000FF
 
-//            for (ix in x - radius..x + radius) {
-//                for (iy in y - radius..y + radius) {
-//
-//                    if (ix < 0 || iy < 0 || ix >= inputImage.width || iy >= inputImage.height)
-//                        continue
-//
-//                    val rgb = Color(inputImage.getRGB(ix, iy))
-//                    red += Math.pow(rgb.red.toDouble(), 2.0).toInt()
-//                    green += Math.pow(rgb.green.toDouble(), 2.0).toInt()
-//                    blue += Math.pow(rgb.blue.toDouble(), 2.0).toInt()
-//                    pixel++
-//
-//                }
-//            }
-            val rgb = Color(inputImage.getRGB(x, y))
-            val r = rgb.red.toFloat() / 255f //Math.sqrt((red / pixel).toDouble()) / 255.0
-            val g = rgb.green.toFloat() / 255f //Math.sqrt((green / pixel).toDouble()) / 255.0
-            val b = rgb.blue.toFloat() / 255f //Math.sqrt((blue / pixel).toDouble()) / 255.0
+            if (g > 128 && g > b + 20 && g > r + 20) {
+                outputImage.setRGB(x, y, targetColor.rgb)
+                xSum += x.toLong()
+                ySum += y.toLong()
+                totalCount++
 
-            val yellow = Math.min(r, g) * (1 - b) // TODO: find a function to find yellowness
-
-            if (g > .50 && g > b + 0.1 && g > r + 0.1) { //was 10
-                outputImage.setRGB(x, y, Color.GREEN.rgb)
-                xSumY += x.toLong()
-                ySumY += y.toLong()
-                totalCountY++
-
-//            } else if (r > 0.5 && r > b + 0.18 && r > g + 0.18) {
-//                // its Red
-//                outputImage.setRGB(x, y, Color.RED.rgb)
-//                xSumR += x.toLong()
-//                ySumR += y.toLong()
-//                totalCountR++
-//
-////            } else if (b > 0.5 && b > r + 0.18 && b > g + 0.18) {
-////                outputImage.setRGB(x, y, Color.BLUE.rgb)
-////                // its blue
-////                xSumB += x.toLong()
-////                ySumB += y.toLong()
-////                totalCountB++
-//
             } else {
-                outputImage.setRGB(x, y, inputImage.getRGB(x, y))
+                outputImage.setRGB(x, y, rgb)
             }
-
         }
     }
 
-    val xCenterY: Int
-    val yCenterY: Int
-    if (totalCountY == 0) {
-        xCenterY = inputImage.width / 2
-        yCenterY = inputImage.height / 2
+
+    val xCenter: Int
+    val yCenter: Int
+
+    var seen = false;
+    var pixelSize = 0;
+    var rightExtension = inputImage.width
+    var leftExtension = inputImage.width
+
+    if (totalCount <= 3) {
+        xCenter = inputImage.width / 2
+        yCenter = inputImage.height / 2
     } else {
-        xCenterY = (xSumY / totalCountY).toInt()
-        yCenterY = (ySumY / totalCountY).toInt()
+        xCenter = (xSum / totalCount).toInt()
+        yCenter = (ySum / totalCount).toInt()
+
+        // left
+        for (x in (xCenter downTo 0)) {
+            val g = outputImage.getRGB(x, yCenter) shr 8 and 0x000000FF
+            if (g >= 255) {
+                leftExtension = xCenter - x
+                break
+            }
+        }
+
+        // right
+        for (x in xCenter until inputImage.width) {
+            val g = outputImage.getRGB(x, yCenter) shr 8 and 0x000000FF
+            if (g >= 255) {
+                rightExtension = x - xCenter
+                break
+            }
+        }
+
+        val total = rightExtension + leftExtension
+        if (total < inputImage.width) {
+            seen = true
+            pixelSize = total
+        }
     }
 
-    val xCenterR: Int
-    val yCenterR: Int
-    if (totalCountR == 0) {
-        xCenterR = inputImage.width / 2
-        yCenterR = inputImage.height / 2
-    } else {
-        xCenterR = (xSumR / totalCountR).toInt()
-        yCenterR = (ySumR / totalCountR).toInt()
-    }
+    /*
+    * distance(mm) = (focal length (mm) * real height of the object (mm) * camera frame height in device (pixels) ) / ( image height (pixels) * sensor height (mm))
+    * */
+    //In Millimeters - Vaues for C270 web cam
+    val focalLength = 4.2
+    val targetPhysicalHeight = 133.35 //5.25in
+    val cameraFrameHeight = inputImage.height
+    val cameraSensorHeight = 2.2
+    val targetPixelHeight = pixelSize //How to get?
 
-    val xCenterB: Int
-    val yCenterB: Int
-    if (totalCountB == 0) {
-        xCenterB = inputImage.width / 2
-        yCenterB = inputImage.height / 2
-    } else {
-        xCenterB = (xSumB / totalCountB).toInt()
-        yCenterB = (ySumB / totalCountB).toInt()
-    }
-
-    val targetingOutput = TargetingOutput()
-    targetingOutput.imageWidth = inputImage.width
-    targetingOutput.imageHeight = inputImage.height
-
-    targetingOutput.xCenterYellow = xCenterY
-    targetingOutput.yCenterYellow = yCenterY
-
-    targetingOutput.xCenterRed = xCenterR
-    targetingOutput.yCenterRed = yCenterR
-
-    targetingOutput.xCenterBlue = xCenterB
-    targetingOutput.yCenterBlue = yCenterB
-
-    targetingOutput.processedImage = outputImage
-    return targetingOutput
+    return TargetingOutput(
+            imageWidth = inputImage.width,
+            imageHeight = inputImage.height,
+            xCenterColor = xCenter,
+            yCenterColor = yCenter,
+            targetDistance = (focalLength * targetPhysicalHeight * cameraFrameHeight) / (targetPixelHeight * cameraSensorHeight),
+            processedImage = outputImage,
+            seen = seen,
+            rightExtension = rightExtension,
+            leftExtension = leftExtension
+    )
 }
 
-class TargetingOutput {
+class TargetingOutput(
+        val imageWidth: Int,
+        val imageHeight: Int,
+        val xCenterColor: Int,
+        val yCenterColor: Int,
+        var targetDistance: Double,
+        val processedImage: BufferedImage,
+        val seen: Boolean,
+        val rightExtension: Int,
+        val leftExtension: Int
+) {
 
-    var imageWidth: Int = 0
-    var imageHeight: Int = 0
-
-    var xCenterYellow: Int = 0
-    var yCenterYellow: Int = 0
-
-    var xCenterRed: Int = 0
-    var yCenterRed: Int = 0
-
-    var xCenterBlue: Int = 0
-    var yCenterBlue: Int = 0
-
-    var processedImage: BufferedImage? = null
 
     /**
      * Get the center as a fraction of total image width
      *
      * @return float from -0.5 to 0.5
      */
-    val yellowCenter: Double
-        get() = xCenterYellow.toDouble() / imageWidth.toDouble() - 0.5
+    val targetCenter: Double
+        get() = xCenterColor.toDouble() / imageWidth.toDouble() - 0.5
 
-    val redCenter: Double
-        get() = xCenterRed.toDouble() / imageWidth.toDouble() - 0.5
 
-    val blueCenter: Double
-        get() = xCenterBlue.toDouble() / imageWidth.toDouble() - 0.5
-
-    val yellowDistance: Double
-        get() = 0.0
-
-    val redDistance: Double
-        get() = 0.0
-
-    val blueDistance: Double
-        get() = 0.0
+    val targetDistanceInches: Double
+        get() = targetDistance / 25.4
 
     /**
      * This draws debug info onto the image before it's displayed.
@@ -306,28 +226,22 @@ class TargetingOutput {
      * @param outputImage
      * @return
      */
-    fun drawOntoImage(outputImage: BufferedImage?): BufferedImage? {
+    fun drawOntoImage(drawColor: Color, outputImage: BufferedImage): BufferedImage {
 
-        val g = outputImage?.createGraphics()
-        if (g == null) {
-            return null
+        val g = outputImage.createGraphics()
+
+        g.color = drawColor
+        g.drawLine(xCenterColor, yCenterColor - 10, xCenterColor, yCenterColor + 10)
+
+        if (seen) {
+            g.color = Color.YELLOW
+            g.drawLine(xCenterColor - leftExtension, yCenterColor, xCenterColor + rightExtension, yCenterColor)
         }
-
-        g.color = Color.YELLOW
-        g.drawLine(xCenterYellow, yCenterYellow - 10, xCenterYellow, yCenterYellow + 10)
-
-        g.color = Color.RED
-        g.drawLine(xCenterRed, yCenterRed - 10, xCenterRed, yCenterRed + 10)
-
-        g.color = Color.BLUE
-        g.drawLine(xCenterBlue, yCenterBlue - 10, xCenterBlue, yCenterBlue + 10)
-
         // width labels, px and % screen width
-        //g.drawString(width + " px", xCenterYellow, yCenterYellow - 25);
+        g.color = Color.BLUE
+        g.drawString(df.format(targetDistanceInches) + " Inches", 10, 10)
 
         //g.drawLine(outputImage.getWidth() / 2, yCenterYellow + 20, calcXCenter, yCenterYellow + 20);
-
-
         return outputImage
     }
 
@@ -337,12 +251,6 @@ class TargetingOutput {
 }
 
 class ImageInfo {
-
-    var yellow = 0.0
-    var red = 0.0
-    var blue = 0.0
-
-    var redDistance = java.lang.Double.MAX_VALUE
-    var blueDistance = java.lang.Double.MAX_VALUE
-    var yellowDistance = java.lang.Double.MAX_VALUE
+    var color = 0.0
+    var distance = java.lang.Double.MAX_VALUE
 }
