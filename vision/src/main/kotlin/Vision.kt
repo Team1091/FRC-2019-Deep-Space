@@ -28,9 +28,11 @@ fun main(args: Array<String>) {
     }
 
     val webcams = Webcam.getWebcams()
-    webcams.map { it.name }.forEachIndexed { i, cam -> println("$i: $cam") }
+    webcams
+            .map { it.name }
+            .forEachIndexed { i, cam -> println("$i: $cam") }
 
-    val webcam = webcams.first()
+    val webcam = webcams.last()
     webcam.setCustomViewSizes(Dimension(640, 480))
     webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
@@ -46,8 +48,9 @@ fun main(args: Array<String>) {
             val targetingOutput = process(Color.GREEN, imageToUse)
 
             // pull out results we care about, let web server serve them as quick as possible
-            imageInfo.color = targetingOutput.targetCenter
-            imageInfo.distance = targetingOutput.targetDistance
+            imageInfo.seen = targetingOutput.seen
+            imageInfo.center = targetingOutput.targetCenter
+            imageInfo.distance = targetingOutput.targetDistanceInches
 
             writeToPanel(panel, g2, targetingOutput)
         }
@@ -95,6 +98,8 @@ fun main(args: Array<String>) {
     // a little webserver.  Go to http://localhost:4567/center
     get("/center") { _, _ -> gson.toJson(imageInfo) }
 
+    // This will be accessed from the robot at
+    // http://laptop-1091.local:4567/center
 }
 
 fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
@@ -175,7 +180,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     * */
     //In Millimeters - Vaues for C270 web cam
     val focalLength = 4.2
-    val targetPhysicalHeight = 133.35 //5.25in
+    val targetPhysicalHeight = 234.95 //9.25in
     val cameraFrameHeight = inputImage.height
     val cameraSensorHeight = 2.2
     val targetPixelHeight = pixelSize //How to get?
@@ -249,6 +254,7 @@ class TargetingOutput(
 }
 
 class ImageInfo {
-    var color = 0.0
+    var seen = false
+    var center = 0.0
     var distance = java.lang.Double.MAX_VALUE
 }

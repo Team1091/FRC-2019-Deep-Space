@@ -69,9 +69,9 @@ class TeamRobotImpl(
         components.drive.arcadeDrive(y, x)
 
         val kickstandPower = if (components.gameController.pressedY()) {
-            1.0
+            0.5
         } else if (components.gameController.pressedB()) {
-            -0.5
+            -1.0
         } else {
             0.0
         }
