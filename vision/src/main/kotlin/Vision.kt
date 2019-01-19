@@ -18,7 +18,7 @@ import javax.swing.WindowConstants
 private val imageInfo = ImageInfo()
 
 private val gson = Gson()
-private val testImage: String? = null//"C:\\WIP\\Assets\\ReflectorDistance1.jpg"
+private val testImage: String? = null // "test.png"
 
 fun main(args: Array<String>) {
 
@@ -119,7 +119,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
             val g = rgb shr 8 and 0x000000FF
             val b = rgb and 0x000000FF
 
-            if (g > 128 && g > b + 20 && g > r + 20) { //was 10
+            if (g > 128 && g > b + 20 && g > r + 20) {
                 outputImage.setRGB(x, y, targetColor.rgb)
                 xSum += x.toLong()
                 ySum += y.toLong()
@@ -131,14 +131,45 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
         }
     }
 
+
     val xCenter: Int
     val yCenter: Int
-    if (totalCount == 0) {
+
+    var seen = false;
+    var pixelSize = 0;
+    var rightExtension = inputImage.width
+    var leftExtension = inputImage.width
+
+    if (totalCount <= 3) {
         xCenter = inputImage.width / 2
         yCenter = inputImage.height / 2
     } else {
         xCenter = (xSum / totalCount).toInt()
         yCenter = (ySum / totalCount).toInt()
+
+        // left
+        for (x in (xCenter downTo 0)) {
+            val g = outputImage.getRGB(x, yCenter) shr 8 and 0x000000FF
+            if (g >= 255) {
+                leftExtension = xCenter - x
+                break
+            }
+        }
+
+        // right
+        for (x in xCenter until inputImage.width) {
+            val g = outputImage.getRGB(x, yCenter) shr 8 and 0x000000FF
+            if (g >= 255) {
+                rightExtension = x - xCenter
+                break
+            }
+        }
+
+        val total = rightExtension + leftExtension
+        if (total < inputImage.width) {
+            seen = true
+            pixelSize = total
+        }
     }
 
     /*
@@ -149,7 +180,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     val targetPhysicalHeight = 133.35 //5.25in
     val cameraFrameHeight = inputImage.height
     val cameraSensorHeight = 2.2
-    val targetPixelHeight = 45 //How to get?
+    val targetPixelHeight = pixelSize //How to get?
 
     return TargetingOutput(
             imageWidth = inputImage.width,
@@ -157,7 +188,10 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
             xCenterColor = xCenter,
             yCenterColor = yCenter,
             targetDistance = (focalLength * targetPhysicalHeight * cameraFrameHeight) / (targetPixelHeight * cameraSensorHeight),
-            processedImage = outputImage
+            processedImage = outputImage,
+            seen = seen,
+            rightExtension = rightExtension,
+            leftExtension = leftExtension
     )
 }
 
@@ -167,7 +201,10 @@ class TargetingOutput(
         val xCenterColor: Int,
         val yCenterColor: Int,
         var targetDistance: Double,
-        val processedImage: BufferedImage
+        val processedImage: BufferedImage,
+        val seen: Boolean,
+        val rightExtension: Int,
+        val leftExtension: Int
 ) {
 
 
@@ -196,8 +233,13 @@ class TargetingOutput(
         g.color = drawColor
         g.drawLine(xCenterColor, yCenterColor - 10, xCenterColor, yCenterColor + 10)
 
+        if (seen) {
+            g.color = Color.YELLOW
+            g.drawLine(xCenterColor - leftExtension, yCenterColor, xCenterColor + rightExtension, yCenterColor)
+        }
         // width labels, px and % screen width
-        g.drawString(df.format(targetDistanceInches) + " Inches", xCenterColor, yCenterColor - 25)
+        g.color = Color.BLUE
+        g.drawString(df.format(targetDistanceInches) + " Inches", 10, 10)
 
         //g.drawLine(outputImage.getWidth() / 2, yCenterYellow + 20, calcXCenter, yCenterYellow + 20);
         return outputImage
