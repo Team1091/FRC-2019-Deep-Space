@@ -67,13 +67,22 @@ class TeamRobotImpl(
         )
 
         components.drive.arcadeDrive(y, x)
+
+        val kickstandPower = if (components.gameController.pressedY()) {
+            1.0
+        } else if (components.gameController.pressedB()) {
+            -0.5
+        } else {
+            0.0
+        }
+
+        components.kickstandMotor.set(kickstandPower)
+
     }
 
-    fun pressStartToggle():Boolean
-    {
-        if(components.gameController.getStart())
-        {
-            toggle= !toggle
+    fun pressStartToggle(): Boolean {
+        if (components.gameController.getStart()) {
+            toggle = !toggle
         }
         return toggle
     }

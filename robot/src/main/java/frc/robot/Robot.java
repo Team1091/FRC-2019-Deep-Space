@@ -37,7 +37,10 @@ public class Robot extends TimedRobot {
                         new WrappedEncoder(3, 4),
                         new WrappedEncoder(5, 6),
                         new WrappedAccelerometer(accel),
-                        new WrappedGyroscope(accel)
+                        new WrappedGyroscope(accel),
+                        new WrappedMotor(
+                                new Victor(2)//Update channel
+                        )
                 )
         );
     }
