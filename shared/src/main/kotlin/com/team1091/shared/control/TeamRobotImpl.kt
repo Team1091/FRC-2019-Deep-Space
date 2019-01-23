@@ -65,7 +65,7 @@ class TeamRobotImpl(
 
     }
 
-    var justPressed = false
+    private var justPressed = false
     override fun teleopPeriodic() {
 
         if (components.gameController.pressedX()) {
@@ -81,9 +81,11 @@ class TeamRobotImpl(
             val dt = getTime()
             autonomousSystem.drive(dt)
             justPressed = true
-        } else {
-            justPressed = false
+
+            return
+        } else if (justPressed) { // and now is not
             autonomousSystem.replace(CommandList()) // stops current commands
+            justPressed = false
         }
 
         // Driving
