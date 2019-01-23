@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
 import frc.robot.components.*;
 
+import java.net.MalformedURLException;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -21,10 +23,9 @@ import frc.robot.components.*;
  */
 public class Robot extends TimedRobot {
     private final TeamRobot teamRobot;
-    public AHRS accel;
 
-    Robot() {
-        accel = new AHRS(SerialPort.Port.kUSB);
+    Robot() throws MalformedURLException {
+        AHRS accel = new AHRS(SerialPort.Port.kUSB);
         // create real components wrapped and send them to the other project
         // then delegate to our shared code
         teamRobot = new TeamRobotImpl(
@@ -40,7 +41,8 @@ public class Robot extends TimedRobot {
                         new WrappedGyroscope(accel),
                         new WrappedMotor(
                                 new Victor(2)//Update channel
-                        )
+                        ),
+                        new TargetingSystem()
                 )
         );
     }

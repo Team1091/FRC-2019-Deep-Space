@@ -10,6 +10,12 @@ class AutonomousSystem {
         this.command?.firstRun()
     }
 
+    fun replace(command:Command){
+        this.command?.cleanUp()
+        command.firstRun()
+        this.command = command
+    }
+
     fun drive(dt: Double) {
 
         if (command == null) {

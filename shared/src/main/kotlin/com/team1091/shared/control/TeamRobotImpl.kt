@@ -1,9 +1,14 @@
 package com.team1091.shared.control
 
 import com.team1091.shared.autonomous.commands.CommandList
+import com.team1091.shared.autonomous.commands.DriveForwards
+import com.team1091.shared.autonomous.commands.DriveToTarget
+import com.team1091.shared.autonomous.commands.ReleaseDisk
 import com.team1091.shared.autonomous.commands.TurnToAngle
+import com.team1091.shared.autonomous.commands.TurnToTarget
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.degrees
+import com.team1091.shared.math.feet
 import com.team1091.shared.math.squareACircle
 import com.team1091.shared.system.AutonomousSystem
 import com.team1091.shared.system.PositionSystem
@@ -30,6 +35,8 @@ class TeamRobotImpl(
                 0.0,
                 startingPos.rotation
         )
+
+        components.targetingSystem.start()
     }
 
     override fun autonomousInit() {
@@ -58,8 +65,28 @@ class TeamRobotImpl(
 
     }
 
+    var justPressed = false
     override fun teleopPeriodic() {
 
+        if (components.gameController.pressedX()) {
+            if (!justPressed) {
+                autonomousSystem.replace(CommandList(
+                        TurnToTarget(components),
+                        DriveToTarget(components),
+                        ReleaseDisk(components),
+                        DriveForwards(components, (-3).feet)
+                ))
+            }
+
+            val dt = getTime()
+            autonomousSystem.drive(dt)
+            justPressed = true
+        } else {
+            justPressed = false
+            autonomousSystem.replace(CommandList()) // stops current commands
+        }
+
+        // Driving
         val (x, y) = squareACircle(
                 components.gameController.getLeftX(),
                 components.gameController.getLeftY(),
@@ -68,6 +95,7 @@ class TeamRobotImpl(
 
         components.drive.arcadeDrive(y, x)
 
+        // Kickstand
         val kickstandPower = if (components.gameController.pressedY()) {
             0.5
         } else if (components.gameController.pressedB()) {
