@@ -67,6 +67,8 @@ class TeamRobotImpl(
 
     private var justPressed = false
     override fun teleopPeriodic() {
+        val dt = getTime()
+        positionSystem.integrate(dt)
 
         if (components.gameController.pressedX()) {
             if (!justPressed) {
@@ -122,6 +124,8 @@ class TeamRobotImpl(
     }
 
     override fun disabledPeriodic() {
+        val dt = getTime()
+        positionSystem.integrate(dt)
 
     }
 
@@ -130,6 +134,8 @@ class TeamRobotImpl(
     }
 
     override fun testPeriodic() {
+        val dt = getTime()
+        positionSystem.integrate(dt)
 
     }
 
