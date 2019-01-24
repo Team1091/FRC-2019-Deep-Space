@@ -11,18 +11,22 @@ import com.team1091.shared.math.degrees
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.squareACircle
 import com.team1091.shared.system.AutonomousSystem
+import com.team1091.shared.system.GrabberSystem
+import com.team1091.shared.system.ITargetingSystem
 import com.team1091.shared.system.PositionSystem
 
 
 // This controls our robot in both the sim and real life
 class TeamRobotImpl(
-        val components: RobotComponents
+        val components: RobotComponents,
+        val targetingSystem: ITargetingSystem
 ) : TeamRobot {
 
     var toggle = true
 
     private val autonomousSystem = AutonomousSystem()
-
+    private val grabberSystem = GrabberSystem(components.grabberSolenoid)
+    //    private val targetingSystem:ITargetingSystem
     lateinit var positionSystem: PositionSystem
 
     override fun robotInit(startingPos: StartingPos) {
@@ -36,7 +40,7 @@ class TeamRobotImpl(
                 startingPos.rotation
         )
 
-        components.targetingSystem.start()
+        targetingSystem.start()
     }
 
     override fun autonomousInit() {
@@ -73,9 +77,9 @@ class TeamRobotImpl(
         if (components.gameController.pressedX()) {
             if (!justPressed) {
                 autonomousSystem.replace(CommandList(
-                        TurnToTarget(components),
+                        TurnToTarget(components, targetingSystem),
                         DriveToTarget(components),
-                        ReleaseDisk(components),
+                        ReleaseDisk(grabberSystem),
                         DriveForwards(components, (-3).feet)
                 ))
             }

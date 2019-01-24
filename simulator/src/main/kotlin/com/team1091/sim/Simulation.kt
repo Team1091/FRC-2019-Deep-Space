@@ -10,6 +10,8 @@ import com.team1091.sim.components.SimController
 import com.team1091.sim.components.SimDrive
 import com.team1091.sim.components.SimEncoder
 import com.team1091.sim.components.SimGyroscope
+import com.team1091.sim.components.SimMotor
+import com.team1091.sim.components.SimSolenoid
 import com.team1091.sim.phys.GamePiece
 import com.team1091.sim.phys.Obstacle
 import com.team1091.sim.phys.SimRobot
@@ -42,12 +44,14 @@ class Simulator : PApplet() {
                     SimEncoder(20.0),
                     SimEncoder(-20.0),
                     SimAccelerometer(),
-                    SimGyroscope()
+                    SimGyroscope(),
+                    SimMotor(),
+                    SimSolenoid()
             )
 
             SimRobot(start,
                     25f, 30f,
-                    TeamRobotImpl(rc),
+                    TeamRobotImpl(rc, SimTargetingSystem()),
                     rc // These are needed to simulate its position.
             )
         }

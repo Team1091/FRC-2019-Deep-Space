@@ -1,14 +1,14 @@
 package com.team1091.shared.autonomous.commands
 
-import com.team1091.shared.control.RobotComponents
+import com.team1091.shared.system.GrabberSystem
 
-class GrabDisk(val components: RobotComponents) : Command {
+class GrabDisk(val grabberSystem: GrabberSystem) : Command {
 
     override fun firstRun() {
     }
 
     override fun execute(dt: Double): Command? {
-        components.grabberSystem.grab()
+        grabberSystem.grab()
         return null
     }
 

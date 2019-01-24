@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 import com.team1091.shared.control.RobotComponents;
 import com.team1091.shared.control.TeamRobot;
 import com.team1091.shared.control.TeamRobotImpl;
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     private final TeamRobot teamRobot;
 
     Robot() throws MalformedURLException {
-        AHRS accel = new AHRS(SerialPort.Port.kUSB);
+//        AHRS accel = new AHRS(SerialPort.Port.kUSB);
         // create real components wrapped and send them to the other project
         // then delegate to our shared code
         teamRobot = new TeamRobotImpl(
@@ -46,17 +46,13 @@ public class Robot extends TimedRobot {
                         ),
                         new WrappedEncoder(3, 4),
                         new WrappedEncoder(5, 6),
-                        new WrappedAccelerometer(accel),
-                        new WrappedGyroscope(accel),
+                        new WrappedAccelerometer(),
+                        new WrappedGyroscope(),
                         new WrappedMotor(
                                 new Victor(2)//Update channel
                         ),
-
-                        new TargetingSystem(),
-                        new GrabberSystem(
-                                new WrappedSolenoid(
-                                        new Solenoid(3)
-                                )
+                        new WrappedSolenoid(
+                                new Solenoid(3)
                         )
                 )
         );

@@ -6,6 +6,7 @@ import com.team1091.shared.components.IEncoder
 import com.team1091.shared.components.IGameController
 import com.team1091.shared.components.IGyroscope
 import com.team1091.shared.components.IMotorController
+import com.team1091.shared.components.ISolenoid
 import com.team1091.shared.system.IGrabberSystem
 import com.team1091.shared.system.ITargetingSystem
 
@@ -18,6 +19,7 @@ class RobotComponents(
         val accelerometer: IAccelerometer,
         val gyroscope: IGyroscope,
         val kickstandMotor: IMotorController,
-        val targetingSystem: ITargetingSystem,
-        val grabberSystem: IGrabberSystem
+        val grabberSolenoid: ISolenoid
+//        val targetingSystem: ITargetingSystem,
+//        val grabberSystem: IGrabberSystem
 )

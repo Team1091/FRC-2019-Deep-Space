@@ -1,28 +1,27 @@
 package frc.robot.components;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.team1091.shared.components.IAccelerometer;
 
 public class WrappedAccelerometer implements IAccelerometer {
 
-    private final AHRS accelerometer;
+    // private final AHRS accelerometer;
 
-    public WrappedAccelerometer(AHRS accelerometer) {
-        this.accelerometer = accelerometer;
-    }
+//    public WrappedAccelerometer(AHRS accelerometer) {
+//        this.accelerometer = accelerometer;
+//    }
 
     @Override
     public double getX() {
-        return accelerometer.getRawAccelX();
+        return 0;// return accelerometer.getRawAccelX();
     }
 
     @Override
     public double getY() {
-        return accelerometer.getRawAccelY();
+        return 0;// return accelerometer.getRawAccelY();
     }
 
     @Override
     public double getZ() {
-        return accelerometer.getRawAccelZ();
+        return 0;// return accelerometer.getRawAccelZ();
     }
 }
