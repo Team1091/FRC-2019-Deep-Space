@@ -6,14 +6,13 @@ import com.team1091.shared.system.ITargetingSystem;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class TargetingSystem implements ITargetingSystem {
 
     private static Gson gson = new Gson();
     private URL visionURL;
-    private ImageInfo imageInfo;
+    private ImageInfo imageInfo = new ImageInfo();
 
     private Runnable visionUpdater = () -> {
         while (true) {
@@ -30,8 +29,12 @@ public class TargetingSystem implements ITargetingSystem {
 
     Thread thread = new Thread(visionUpdater);
 
-    public TargetingSystem() throws MalformedURLException {
-        visionURL = new URL("http://localhost:4567/center");
+    public TargetingSystem() {
+        try {
+            visionURL = new URL("http://laptop-1091.local:4567/center");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -45,9 +48,9 @@ public class TargetingSystem implements ITargetingSystem {
     }
 
     class ImageInfo {
-        boolean seen;
-        double center;
-        double distance;
+        boolean seen = false;
+        double center = 0.0;
+        double distance = Double.MAX_VALUE;
     }
 
 }

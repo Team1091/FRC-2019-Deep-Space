@@ -22,10 +22,10 @@ private val testImage: String? = null // "test.png"
 
 fun main(args: Array<String>) {
 
-    if (args.size == 1) {
+//    if (args.size == 1) {
         Webcam.setDriver(IpCamDriver())
         IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
-    }
+//    }
 
     val webcams = Webcam.getWebcams()
     webcams
@@ -180,7 +180,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     * */
     //In Millimeters - Vaues for C270 web cam
     val focalLength = 4.2
-    val targetPhysicalHeight = 234.95 //9.25in
+    val targetPhysicalHeight = 279.4 //11in
     val cameraFrameHeight = inputImage.height
     val cameraSensorHeight = 2.2
     val targetPixelHeight = pixelSize //How to get?
@@ -256,5 +256,5 @@ class TargetingOutput(
 class ImageInfo {
     var seen = false
     var center = 0.0
-    var distance = java.lang.Double.MAX_VALUE
+    var distance = 1000.0
 }

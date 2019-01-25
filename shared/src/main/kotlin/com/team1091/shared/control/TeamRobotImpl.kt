@@ -101,7 +101,12 @@ class TeamRobotImpl(
                 pressStartToggle()
         )
 
-        components.drive.arcadeDrive(y, x)
+        if(components.gameController.pressedA()){
+            components.drive.arcadeDrive(y, x)
+        }else{
+            components.drive.arcadeDrive(0.5 *y, 0.5 *x)
+        }
+
 
         // Kickstand
         val kickstandPower = if (components.gameController.pressedY()) {

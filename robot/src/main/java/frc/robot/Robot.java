@@ -33,7 +33,7 @@ import java.net.MalformedURLException;
 public class Robot extends TimedRobot {
     private final TeamRobot teamRobot;
 
-    Robot() throws MalformedURLException {
+    Robot()  {
 //        AHRS accel = new AHRS(SerialPort.Port.kUSB);
         // create real components wrapped and send them to the other project
         // then delegate to our shared code
@@ -54,14 +54,20 @@ public class Robot extends TimedRobot {
                         new WrappedSolenoid(
                                 new Solenoid(3)
                         )
-                )
+                ),
+                new TargetingSystem()
         );
     }
 
     @Override
     public void robotInit() {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setExposureAuto();
+//        camera.setExposureAuto();
+
+        camera.setBrightness(20);
+        camera.setExposureManual(20);
+        camera.setWhiteBalanceManual(50);
+
         // TODO: get this from the field or dropdown
         StartingPos pos = StartingPos.BLUE_1;
         teamRobot.robotInit(pos);
