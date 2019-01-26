@@ -4,16 +4,20 @@ import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode
 import com.google.gson.Gson
+import spark.Spark
+import spark.Spark.exception
 import spark.Spark.get
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.File
+import java.lang.Double.min
 import java.text.DecimalFormat
 import javax.imageio.ImageIO
 import javax.swing.JFrame
 import javax.swing.WindowConstants
+
 
 private val imageInfo = ImageInfo()
 
@@ -50,7 +54,7 @@ fun main(args: Array<String>) {
             // pull out results we care about, let web server serve them as quick as possible
             imageInfo.seen = targetingOutput.seen
             imageInfo.center = targetingOutput.targetCenter
-            imageInfo.distance = targetingOutput.targetDistanceInches
+            imageInfo.distance = min(1000.0, targetingOutput.targetDistanceInches)
 
             writeToPanel(panel, g2, targetingOutput)
         }
@@ -94,6 +98,9 @@ fun main(args: Array<String>) {
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     window.pack()
     window.isVisible = true
+
+    // handle exceptions by just printing them out
+    exception(Exception::class.java, { exception, request, response -> exception.printStackTrace() })
 
     // a little webserver.  Go to http://localhost:4567/center
     get("/center") { _, _ -> gson.toJson(imageInfo) }

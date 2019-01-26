@@ -161,3 +161,9 @@ bin/
 
 .idea/
 *.iml
+
+robot/build/
+shared/build/
+simulator/build/
+vision/build/
+vision/out/
