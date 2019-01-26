@@ -2,7 +2,7 @@ package com.team1091.shared.math
 
 import kotlin.math.abs
 
-fun squareACircle(u: Double, v: Double, pressed: Boolean): Pair<Double, Double> {
+fun squareACircle(u: Double, v: Double, pressed: Boolean = true): Pair<Double, Double> {
     var x = 0.0
     var y = 0.0
     var u2v2 = Math.pow(u, 2.0) + Math.pow(v, 2.0)

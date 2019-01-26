@@ -1,11 +1,6 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.CommandList
-import com.team1091.shared.autonomous.commands.DriveForwards
-import com.team1091.shared.autonomous.commands.DriveToTarget
-import com.team1091.shared.autonomous.commands.ReleaseDisk
-import com.team1091.shared.autonomous.commands.TurnToAngle
-import com.team1091.shared.autonomous.commands.TurnToTarget
+import com.team1091.shared.autonomous.commands.*
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.degrees
 import com.team1091.shared.math.feet
@@ -76,6 +71,7 @@ class TeamRobotImpl(
 
         if (components.gameController.pressedX()) {
             if (!justPressed) {
+                println("Goodbye world")
                 autonomousSystem.replace(CommandList(
                         TurnToTarget(components, targetingSystem),
                         DriveToTarget(components),
@@ -84,7 +80,6 @@ class TeamRobotImpl(
                 ))
             }
 
-            val dt = getTime()
             autonomousSystem.drive(dt)
             justPressed = true
 
@@ -101,10 +96,12 @@ class TeamRobotImpl(
                 pressStartToggle()
         )
 
-        if(components.gameController.pressedA()){
-            components.drive.arcadeDrive(y, x)
-        }else{
-            components.drive.arcadeDrive(0.5 *y, 0.5 *x)
+        if (components.gameController.pressedA()) {
+            components.driveSystem.forwardAmnt = y;
+            components.driveSystem.turnAmnt = x;
+        } else {
+            components.driveSystem.forwardAmnt = 0.7 * x;
+            components.driveSystem.turnAmnt = 0.7 * y;
         }
 
 
@@ -118,6 +115,8 @@ class TeamRobotImpl(
         }
 
         components.kickstandMotor.set(kickstandPower)
+        //doit
+        components.driveSystem.drive();
 
     }
 

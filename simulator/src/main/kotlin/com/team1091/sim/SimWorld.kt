@@ -160,7 +160,7 @@ class SimWorld(
 
         // TODO: add each robot's drive's acceleration
         for (robot in robots) {
-            val drive = (robot.rc.drive as SimDrive)
+            val drive = (robot.rc.driveSystem.drive as SimDrive)
             drive.applyForce(robot.body)
 
             val accelerometer = robot.rc.accelerometer as SimAccelerometer

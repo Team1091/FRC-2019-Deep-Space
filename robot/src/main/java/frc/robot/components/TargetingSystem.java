@@ -38,8 +38,10 @@ public class TargetingSystem implements ITargetingSystem {
     }
 
     @Override
-    public double getCenter() {
-        return imageInfo.center;
+    public Double getCenter() {
+        if (imageInfo.seen)
+            return imageInfo.center;
+        return null;
     }
 
     @Override

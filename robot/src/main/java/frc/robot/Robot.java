@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
                                 new Victor(2)//Update channel
                         ),
                         new WrappedSolenoid(
-                                new Solenoid(3)
+                                null //new Solenoid(3) // TODO: this will break the grabber
                         )
                 ),
                 new TargetingSystem()

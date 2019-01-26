@@ -16,14 +16,14 @@ class DriveForwards(private val components: RobotComponents, private val distanc
 
         if (forwards) {
             if (components.leftEncoder.get() < distance.toInches()) {
-                components.drive.arcadeDrive(1.0, 0.0)
+                components.driveSystem.arcadeDrive(1.0, 0.0)
                 return this
             }
             return null
 
         } else { // backwards
             if (components.leftEncoder.get() > distance.toInches()) {
-                components.drive.arcadeDrive(-1.0, 0.0)
+                components.driveSystem.arcadeDrive(-1.0, 0.0)
                 return this
             }
             return null
@@ -35,7 +35,7 @@ class DriveForwards(private val components: RobotComponents, private val distanc
 
     override fun cleanUp() {
         println("Drive Cleaning")
-        components.drive.arcadeDrive(0.0, 0.0)
+        components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 //    override fun getMessage(): String =

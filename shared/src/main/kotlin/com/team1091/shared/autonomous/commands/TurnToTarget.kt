@@ -11,14 +11,16 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
 
     override fun execute(dt: Double): Command? {
         val turn = targetingSystem.getCenter()
-        components.drive.arcadeDrive(0.0, turn)
-
+        if(turn == null){
+            return this
+        }
+        components.driveSystem.arcadeDrive(0.0, turn)
         return this
         // TODO: we should check to see if we are centered and stop
     }
 
     override fun cleanUp() {
-        components.drive.arcadeDrive(0.0, 0.0)
+        components.driveSystem.arcadeDrive(0.0, 0.0)
 
     }
 
