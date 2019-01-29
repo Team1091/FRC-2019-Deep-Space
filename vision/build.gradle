@@ -38,7 +38,15 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-task runlocal(type: JavaExec) {
+
+task visionRobot(type:JavaExec){
+    group "team1091"
+    description "Run the vision code using the robot."
+
+    main = mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+}
+task visionLocal(type: JavaExec) {
     group "team1091"
     description "Run the vision code using your webcam."
 

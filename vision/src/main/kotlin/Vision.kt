@@ -26,10 +26,10 @@ private val testImage: String? = null // "test.png"
 
 fun main(args: Array<String>) {
 
-//    if (args.size == 1) {
+    if (args.size != 1) {
         Webcam.setDriver(IpCamDriver())
         IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
-//    }
+    }
 
     val webcams = Webcam.getWebcams()
     webcams

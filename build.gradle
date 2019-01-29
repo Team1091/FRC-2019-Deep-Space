@@ -1,7 +1,6 @@
 allprojects {
 
     apply plugin: "idea"
-//    apply plugin: "eclipse"
 
     repositories {
         jcenter()
@@ -24,14 +23,14 @@ wrapper {
     gradleVersion = '5.0'
 }
 
-//task compileAndDeploy() {
-//    group "team1091"
-//    description "Compile all the projects and deploy the robot code"
-//
-//    dependsOn(getTasksByName('assemble', true))
-//
-//    finalizedBy("robot:deploy")
-//    doLast {
-//        println "Done Compiling, will try to deploy"
-//    }
-//}
+task compileAndDeploy() {
+    group "team1091"
+    description "Compile all the projects and deploy the robot code"
+
+    dependsOn(getTasksByName('assemble', true))
+
+    finalizedBy("robot:deploy")
+    doLast {
+        println "Done Compiling, will try to deploy"
+    }
+}
