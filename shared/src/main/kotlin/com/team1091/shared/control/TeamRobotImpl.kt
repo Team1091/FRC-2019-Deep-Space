@@ -4,6 +4,7 @@ import com.team1091.shared.autonomous.commands.*
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.degrees
 import com.team1091.shared.math.feet
+import com.team1091.shared.math.inches
 import com.team1091.shared.math.squareACircle
 import com.team1091.shared.system.AutonomousSystem
 import com.team1091.shared.system.GrabberSystem
@@ -41,8 +42,8 @@ class TeamRobotImpl(
     override fun autonomousInit() {
         autonomousSystem.init(
                 CommandList(
-                        TurnToAngle(components, positionSystem, 90.degrees)
-//                        DriveForwards(components, 20.0.inches),
+//                        TurnToAngle(components, positionSystem, 90.degrees)
+                        DriveForwards(components, 20.0.inches)
 //                        Wait(components, 2.seconds),
 //                        Turn(components, 90.0.degrees),
 //                        Wait(components, 2.seconds),
@@ -54,10 +55,15 @@ class TeamRobotImpl(
 
     }
 
+    // TODO: since we are driving in autonomous, we should just call teleopPeriodic here
     override fun autonomousPeriodic() {
         val dt = getTime()
         autonomousSystem.drive(dt)
         positionSystem.integrate(dt)
+
+        components.kickstandMotor.set(0.0)
+        components.driveSystem.drive();
+
     }
 
     override fun teleopInit() {

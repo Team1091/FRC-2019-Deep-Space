@@ -34,3 +34,9 @@ task compileAndDeploy() {
         println "Done Compiling, will try to deploy"
     }
 }
+
+task runSim(type:JavaExec) {
+    group "team1091"
+    description "Run the simulation"
+    finalizedBy("simulator:run")
+}
