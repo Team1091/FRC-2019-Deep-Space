@@ -1,8 +1,11 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.*
+import com.team1091.shared.autonomous.commands.CommandList
+import com.team1091.shared.autonomous.commands.DriveForwards
+import com.team1091.shared.autonomous.commands.DriveToTarget
+import com.team1091.shared.autonomous.commands.ReleaseDisk
+import com.team1091.shared.autonomous.commands.TurnToTarget
 import com.team1091.shared.game.StartingPos
-import com.team1091.shared.math.degrees
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
 import com.team1091.shared.math.squareACircle
@@ -18,7 +21,7 @@ class TeamRobotImpl(
         val targetingSystem: ITargetingSystem
 ) : TeamRobot {
 
-    var toggle = true
+//    var toggle = true
 
     private val autonomousSystem = AutonomousSystem()
     private val grabberSystem = GrabberSystem(components.grabberSolenoid)
@@ -55,14 +58,15 @@ class TeamRobotImpl(
 
     }
 
-    // TODO: since we are driving in autonomous, we should just call teleopPeriodic here
+    // since we are driving in autonomous, we should just call teleopPeriodic here
     override fun autonomousPeriodic() {
-        val dt = getTime()
-        autonomousSystem.drive(dt)
-        positionSystem.integrate(dt)
-
-        components.kickstandMotor.set(0.0)
-        components.driveSystem.drive();
+        teleopPeriodic()
+//        val dt = getTime()
+//        autonomousSystem.drive(dt)
+//        positionSystem.integrate(dt)
+//
+//        components.kickstandMotor.set(0.0)
+//        components.driveSystem.drive();
 
     }
 
@@ -99,7 +103,7 @@ class TeamRobotImpl(
         val (x, y) = squareACircle(
                 components.gameController.getLeftX(),
                 components.gameController.getLeftY(),
-                pressStartToggle()
+                false
         )
 
         if (components.gameController.pressedA()) {
@@ -126,12 +130,12 @@ class TeamRobotImpl(
 
     }
 
-    fun pressStartToggle(): Boolean {
-        if (components.gameController.getStart()) {
-            toggle = !toggle
-        }
-        return toggle
-    }
+//    fun pressStartToggle(): Boolean {
+//        if (components.gameController.getStart()) {
+//            toggle = !toggle
+//        }
+//        return toggle
+//    }
 
     override fun disabledInit() {
 
