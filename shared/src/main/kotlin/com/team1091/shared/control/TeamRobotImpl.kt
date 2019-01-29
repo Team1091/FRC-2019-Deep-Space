@@ -93,6 +93,8 @@ class TeamRobotImpl(
             autonomousSystem.drive(dt)
             justPressed = true
 
+            components.kickstandMotor.set(0.0)
+            components.driveSystem.drive();
             return
         } else if (justPressed) { // and now is not
             autonomousSystem.replace(CommandList()) // stops current commands
@@ -124,10 +126,9 @@ class TeamRobotImpl(
             0.0
         }
 
-        components.kickstandMotor.set(kickstandPower)
-        //doit
-        components.driveSystem.drive();
 
+        components.kickstandMotor.set(kickstandPower)
+        components.driveSystem.drive();
     }
 
 //    fun pressStartToggle(): Boolean {

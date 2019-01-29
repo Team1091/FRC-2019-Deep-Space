@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
                         new WrappedAccelerometer(),
                         new WrappedGyroscope(),
                         new WrappedMotor(
-                                new Victor(2)//Update channel
+                                new Victor(2) //Update channel
                         ),
                         new WrappedSolenoid(
                                 null //new Solenoid(3) // TODO: this will break the grabber
