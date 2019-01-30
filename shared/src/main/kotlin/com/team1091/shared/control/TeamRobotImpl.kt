@@ -1,10 +1,6 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.CommandList
-import com.team1091.shared.autonomous.commands.DriveForwards
-import com.team1091.shared.autonomous.commands.DriveToTarget
-import com.team1091.shared.autonomous.commands.ReleaseDisk
-import com.team1091.shared.autonomous.commands.TurnToTarget
+import com.team1091.shared.autonomous.commands.*
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -109,11 +105,9 @@ class TeamRobotImpl(
         )
 
         if (components.gameController.pressedA()) {
-            components.driveSystem.forwardAmnt = y;
-            components.driveSystem.turnAmnt = x;
+            components.driveSystem.arcadeDrive(y, x)
         } else {
-            components.driveSystem.forwardAmnt = 0.7 * x;
-            components.driveSystem.turnAmnt = 0.7 * y;
+            components.driveSystem.arcadeDrive(0.7 * x, 0.7 * y)
         }
 
 
