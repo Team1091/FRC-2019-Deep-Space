@@ -18,7 +18,7 @@ public class TargetingSystem implements ITargetingSystem {
         while (true) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(visionURL.openStream()))) {
                 imageInfo = gson.fromJson(in.readLine(), ImageInfo.class);
-                System.out.println("Vision: " + imageInfo.center);
+//                System.out.println("Vision: " + imageInfo.center);
                 Thread.sleep(100);
             } catch (ConnectException e) {
                 System.out.println("No connection");

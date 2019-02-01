@@ -74,9 +74,10 @@ class TeamRobotImpl(
 
     }
 
-    fun doTeleopPeriodicAutonomous(dt: Double) {
+    private fun doTeleopPeriodicAutonomous(dt: Double) {
         if (!components.gameController.pressedX()) {
             if (justPressed) { // and now is not
+                println("Autonomous let go")
                 autonomousSystem.replace(CommandList()) // stops current commands
                 justPressed = false
             }
@@ -96,7 +97,7 @@ class TeamRobotImpl(
         justPressed = true
     }
 
-    fun doTeleopPeriodicManual(dt: Double) {
+    private fun doTeleopPeriodicManual(dt: Double) {
         if (components.gameController.pressedX()) {
             return
         }
