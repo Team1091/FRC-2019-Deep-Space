@@ -70,33 +70,35 @@ class TeamRobotImpl(
 
     }
 
-    private var justPressed = false
-    override fun teleopPeriodic() {
-        val dt = getTime()
-        positionSystem.integrate(dt)
-
-        if (components.gameController.pressedX()) {
-            if (!justPressed) {
-                println("Goodbye world")
-                autonomousSystem.replace(CommandList(
-                        TurnToTarget(components, targetingSystem),
-                        DriveToTarget(components),
-                        ReleaseDisk(grabberSystem),
-                        DriveForwards(components, (-3).feet)
-                ))
-            }
-
-            autonomousSystem.drive(dt)
-            justPressed = true
-
-            components.kickstandMotor.set(0.0)
-            components.driveSystem.drive();
+    fun doTeleopPeriodicAutonomous(dt:Double){
+     if (justPressed) { // and now is not
+               autonomousSystem.replace(CommandList()) // stops current commands
+               justPressed = false
+           }
+        if(!components.gameController.pressedX()){
             return
-        } else if (justPressed) { // and now is not
-            autonomousSystem.replace(CommandList()) // stops current commands
-            justPressed = false
+        }
+        if (!justPressed) {
+            println("Goodbye world")
+            autonomousSystem.replace(CommandList(
+                    TurnToTarget(components, targetingSystem),
+                    DriveToTarget(components),
+                    ReleaseDisk(grabberSystem),
+                    DriveForwards(components, (-3).feet)
+            ))
         }
 
+        autonomousSystem.drive(dt)
+        justPressed = true
+
+        components.kickstandMotor.set(0.0)
+        components.driveSystem.drive();
+    }
+
+    fun doTeleopPeriodicManual(dt:Double){
+        if(components.gameController.pressedX()) {
+            return
+        }
         // Driving
         val (x, y) = squareACircle(
                 components.gameController.getLeftX(),
@@ -109,21 +111,20 @@ class TeamRobotImpl(
         } else {
             components.driveSystem.arcadeDrive(0.7 * x, 0.7 * y)
         }
-
-
         // Kickstand
-        val kickstandPower = if (components.gameController.pressedY()) {
-            0.5
-        } else if (components.gameController.pressedB()) {
-            -1.0
-        } else {
-            0.0
-        }
+        components.kickstandsystem.readFromControler()
+    }
 
-
-        components.kickstandMotor.set(kickstandPower)
+    private var justPressed = false
+    override fun teleopPeriodic() {
+        val dt = getTime()
+        positionSystem.integrate(dt)
+        doTeleopPeriodicAutonomous(dt)
+        doTeleopPeriodicManual(dt)
+        components.kickstandsystem.liftAndStand();
         components.driveSystem.drive();
     }
+
 
 //    fun pressStartToggle(): Boolean {
 //        if (components.gameController.getStart()) {
