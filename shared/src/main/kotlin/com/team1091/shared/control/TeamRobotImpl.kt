@@ -1,6 +1,10 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.*
+import com.team1091.shared.autonomous.commands.CommandList
+import com.team1091.shared.autonomous.commands.DriveForwards
+import com.team1091.shared.autonomous.commands.DriveToTarget
+import com.team1091.shared.autonomous.commands.ReleaseDisk
+import com.team1091.shared.autonomous.commands.TurnToTarget
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -70,16 +74,16 @@ class TeamRobotImpl(
 
     }
 
-    fun doTeleopPeriodicAutonomous(dt:Double){
-     if (justPressed) { // and now is not
-               autonomousSystem.replace(CommandList()) // stops current commands
-               justPressed = false
-           }
-        if(!components.gameController.pressedX()){
+    fun doTeleopPeriodicAutonomous(dt: Double) {
+        if (!components.gameController.pressedX()) {
+            if (justPressed) { // and now is not
+                autonomousSystem.replace(CommandList()) // stops current commands
+                justPressed = false
+            }
             return
         }
         if (!justPressed) {
-            println("Goodbye world")
+            println("Starting Autonomous Assistance")
             autonomousSystem.replace(CommandList(
                     TurnToTarget(components, targetingSystem),
                     DriveToTarget(components),
@@ -90,13 +94,10 @@ class TeamRobotImpl(
 
         autonomousSystem.drive(dt)
         justPressed = true
-
-        components.kickstandMotor.set(0.0)
-        components.driveSystem.drive();
     }
 
-    fun doTeleopPeriodicManual(dt:Double){
-        if(components.gameController.pressedX()) {
+    fun doTeleopPeriodicManual(dt: Double) {
+        if (components.gameController.pressedX()) {
             return
         }
         // Driving

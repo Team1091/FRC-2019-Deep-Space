@@ -18,6 +18,7 @@ public class TargetingSystem implements ITargetingSystem {
         while (true) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(visionURL.openStream()))) {
                 imageInfo = gson.fromJson(in.readLine(), ImageInfo.class);
+                System.out.println("Vision: " + imageInfo.center);
                 Thread.sleep(100);
             } catch (ConnectException e) {
                 System.out.println("No connection");
@@ -31,7 +32,7 @@ public class TargetingSystem implements ITargetingSystem {
 
     public TargetingSystem() {
         try {
-            visionURL = new URL("http://laptop-1091.local:4567/center");
+            visionURL = new URL("http://10.10.91.75:4567/center");
         } catch (Exception e) {
             e.printStackTrace();
         }
