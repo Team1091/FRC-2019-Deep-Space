@@ -109,7 +109,7 @@ class TeamRobotImpl(
         if (components.gameController.pressedA()) {
             components.driveSystem.arcadeDrive(y, x)
         } else {
-            components.driveSystem.arcadeDrive(0.7 * x, 0.7 * y)
+            components.driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
         }
         // Kickstand
         components.kickstandsystem.readFromController()
