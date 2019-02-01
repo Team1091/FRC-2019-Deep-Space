@@ -10,6 +10,7 @@ import com.team1091.shared.components.ISolenoid
 import com.team1091.shared.system.DriveSystem
 import com.team1091.shared.system.IGrabberSystem
 import com.team1091.shared.system.ITargetingSystem
+import com.team1091.shared.system.KickstandSystem
 
 // Put all the robot's components in here, and we can pass it around.  May just want to pass around the TeamRobotImpl
 class RobotComponents(
@@ -25,4 +26,5 @@ class RobotComponents(
 //        val grabberSystem: IGrabberSystem
 ){
     val driveSystem = DriveSystem(drive)
+    val kickstandsystem = KickstandSystem(kickstandMotor, gameController)
 }
