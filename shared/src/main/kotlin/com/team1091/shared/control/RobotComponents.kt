@@ -26,5 +26,5 @@ class RobotComponents(
 //        val grabberSystem: IGrabberSystem
 ){
     val driveSystem = DriveSystem(drive)
-    val kickstandsystem = KickstandSystem(kickstandMotor,gameController)
+    val kickstandsystem = KickstandSystem(kickstandMotor, gameController)
 }

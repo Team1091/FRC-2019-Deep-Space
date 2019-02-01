@@ -14,7 +14,7 @@ class KickstandSystem(val drive: IMotorController, val controller:IGameControlle
         kickstandPower = 0.0;
     }
 
-    fun readFromControler(){
+    fun readFromController(){
         val kickstandPower = if (controller.pressedY()) {
             0.5
         } else if (controller.pressedB()) {

@@ -112,7 +112,7 @@ class TeamRobotImpl(
             components.driveSystem.arcadeDrive(0.7 * x, 0.7 * y)
         }
         // Kickstand
-        components.kickstandsystem.readFromControler()
+        components.kickstandsystem.readFromController()
     }
 
     private var justPressed = false
