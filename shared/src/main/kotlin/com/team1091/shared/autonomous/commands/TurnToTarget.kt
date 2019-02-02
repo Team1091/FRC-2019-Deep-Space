@@ -1,5 +1,6 @@
 package com.team1091.shared.autonomous.commands
 
+import com.team1091.shared.components.RobotSettings
 import com.team1091.shared.control.RobotComponents
 import com.team1091.shared.system.ITargetingSystem
 
@@ -22,8 +23,7 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
             return this
         }
 
-        // TODO: if we are there (maybe for a while), stop
-        if (false) {
+        if (RobotSettings.centerZeroMargin > Math.abs(turn.center)){
             return null
         }
 
@@ -31,7 +31,6 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
         // if we get to this point, we see the target
         println("Turn ${turn}")
 
-        // TODO: we need to keep aligned center wise
         components.driveSystem.arcadeDrive(
                 forwardAmnt = 0.0,
                 turnAmnt = if (turn.center < 0) -0.65 else 0.65
