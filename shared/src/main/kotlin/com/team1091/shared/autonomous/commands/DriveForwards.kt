@@ -3,7 +3,10 @@ package com.team1091.shared.autonomous.commands
 import com.team1091.shared.control.RobotComponents
 import com.team1091.shared.math.Length
 
-class DriveForwards(private val components: RobotComponents, private val distance: Length) : Command {
+open class DriveForwards(
+        private val components: RobotComponents,
+        private val distance: Length
+) : Command {
 
     private val forwards: Boolean = distance.distance >= 0
 

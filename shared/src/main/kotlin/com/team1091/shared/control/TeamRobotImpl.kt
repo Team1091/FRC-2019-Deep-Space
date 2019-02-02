@@ -1,10 +1,6 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.CommandList
-import com.team1091.shared.autonomous.commands.DriveForwards
-import com.team1091.shared.autonomous.commands.DriveToTarget
-import com.team1091.shared.autonomous.commands.ReleaseDisk
-import com.team1091.shared.autonomous.commands.TurnToTarget
+import com.team1091.shared.autonomous.commands.*
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -27,6 +23,8 @@ class TeamRobotImpl(
     private val grabberSystem = GrabberSystem(components.grabberSolenoid)
     //    private val targetingSystem:ITargetingSystem
     lateinit var positionSystem: PositionSystem
+    private var rightBumperJustPressed = false
+    private var leftBumperJustPressed = false
 
     override fun robotInit(startingPos: StartingPos) {
         positionSystem = PositionSystem(
@@ -75,30 +73,59 @@ class TeamRobotImpl(
     }
 
     private fun doTeleopPeriodicAutonomous(dt: Double) {
-        if (!components.gameController.pressedX()) {
-            if (justPressed) { // and now is not
-                println("Autonomous let go")
-                autonomousSystem.replace(CommandList()) // stops current commands
-                justPressed = false
-            }
-            return
+        if(components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()){
+            println("You are pressing both buttons, clearing commands")
+            autonomousSystem.replace(CommandList()) // stops current commands
+            rightBumperJustPressed = true
+            leftBumperJustPressed = true
         }
-        if (!justPressed) {
-            println("Starting Autonomous Assistance")
-            autonomousSystem.replace(CommandList(
-                    TurnToTarget(components, targetingSystem),
-                    DriveToTarget(components, targetingSystem),
-                    ReleaseDisk(grabberSystem),
-                    DriveForwards(components, (-3).feet)
-            ))
+
+        if (!components.gameController.pressedRightBumper()) {
+            if (rightBumperJustPressed) { // and now is not
+                println("Autonomous  let go")
+                autonomousSystem.replace(CommandList()) // stops current commands
+                rightBumperJustPressed = false
+            }
+
+        } else {
+            if (!rightBumperJustPressed) {
+                println("Starting Autonomous Assistance")
+                autonomousSystem.replace(CommandList(
+                        TurnToTarget(components, targetingSystem),
+                        DriveToTarget(components, targetingSystem),
+                        ReleaseDisk(grabberSystem),
+                        DriveBackwards(components, (3).feet)
+                ))
+            }
+            rightBumperJustPressed = true
+        }
+
+        if (!components.gameController.pressedLeftBumper()) {
+            if (leftBumperJustPressed) { // and now is not
+                println("Autonomous  let go")
+                autonomousSystem.replace(CommandList()) // stops current commands
+                leftBumperJustPressed = false
+            }
+
+        } else{
+            if (!leftBumperJustPressed) {
+                println("Starting Autonomous Assistance")
+                autonomousSystem.replace(CommandList(
+                        TurnToTarget(components, targetingSystem),
+                        DriveToTarget(components, targetingSystem),
+                        GrabDisk(grabberSystem),
+                        DriveBackwards(components, (3).feet)
+                ))
+            }
+            leftBumperJustPressed = true
         }
 
         autonomousSystem.drive(dt)
-        justPressed = true
+
     }
 
     private fun doTeleopPeriodicManual(dt: Double) {
-        if (components.gameController.pressedX()) {
+        if (components.gameController.pressedRightBumper() || components.gameController.pressedLeftBumper()) {
             return
         }
         // Driving
@@ -117,7 +144,6 @@ class TeamRobotImpl(
         components.kickstandsystem.readFromController()
     }
 
-    private var justPressed = false
     override fun teleopPeriodic() {
         val dt = getTime()
         positionSystem.integrate(dt)
