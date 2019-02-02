@@ -13,6 +13,6 @@ public class WrappedSolenoid implements ISolenoid {
 
     @Override
     public void set(boolean value) {
-//        solenoid.set(value);
+        solenoid.set(value);
     }
 }

@@ -8,7 +8,7 @@ class Pid(val kp: Double, val kd: Double, val ki: Double) {
     fun run(goalPosition: Double, curPosition: Double): Double {
 
         /* calculate error */
-        val err = goalPosition - curPosition;
+        val err = goalPosition - curPosition
 
         /* calculate the output */
         val proportional = kp * err

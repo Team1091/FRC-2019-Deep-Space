@@ -33,7 +33,7 @@ class DriveToTarget(val components: RobotComponents, val targetingSystem: ITarge
 
 
         // if we get to this point, we see the target
-        println("Turn ${turn}")
+        println("Turn $turn")
         val forwardComponent = min(
                 max(turn.distance / RobotSettings.distanceCoeffecient, RobotSettings.driveToMinMotorPower),
                 RobotSettings.driveToMotorPower)

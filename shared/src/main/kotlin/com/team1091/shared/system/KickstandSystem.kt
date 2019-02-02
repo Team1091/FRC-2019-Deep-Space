@@ -6,22 +6,20 @@ import com.team1091.shared.components.IMotorController
 
 class KickstandSystem(val drive: IMotorController, val controller: IGameController) {
 
-    var kickstandPower = 0.0;
+    var kickstandPower = 0.0
 
 
     fun liftAndStand() {
-        drive.set(kickstandPower);
-        kickstandPower = 0.0;
+        drive.set(kickstandPower)
+        kickstandPower = 0.0
     }
 
     fun readFromController() {
-        val kickstandPower = if (controller.pressedY()) {
-            0.5
-        } else if (controller.pressedB()) {
-            -1.0
-        } else {
-            0.0
+        val kickstandPower = when {
+            controller.pressedY() -> 0.5
+            controller.pressedB() -> -1.0
+            else -> 0.0
         }
-        this.kickstandPower = kickstandPower;
+        this.kickstandPower = kickstandPower
     }
 }

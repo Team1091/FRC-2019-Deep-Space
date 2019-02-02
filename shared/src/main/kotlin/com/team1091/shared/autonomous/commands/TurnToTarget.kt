@@ -4,7 +4,7 @@ import com.team1091.shared.components.RobotSettings
 import com.team1091.shared.control.RobotComponents
 import com.team1091.shared.system.ITargetingSystem
 
-class TurnToTarget(val components: RobotComponents, val targetingSystem: ITargetingSystem) : Command {
+class TurnToTarget(val components: RobotComponents, private val targetingSystem: ITargetingSystem) : Command {
 
     override fun firstRun() {
 
@@ -29,7 +29,7 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
 
 
         // if we get to this point, we see the target
-        println("Turn ${turn}")
+        println("Turn $turn")
 
         components.driveSystem.arcadeDrive(
                 forwardAmnt = 0.0,

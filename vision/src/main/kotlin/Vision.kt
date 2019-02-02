@@ -99,7 +99,7 @@ fun main(args: Array<String>) {
     window.isVisible = true
 
     // handle exceptions by just printing them out
-    exception(Exception::class.java, { exception, request, response -> exception.printStackTrace() })
+    exception(Exception::class.java) { exception, request, response -> exception.printStackTrace() }
 
     // a little webserver.  Go to http://localhost:4567/center
     get("/center") { _, _ -> gson.toJson(imageInfo) }
@@ -146,8 +146,8 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     val xCenter: Int
     val yCenter: Int
 
-    var seen = false;
-    var pixelSize = 0;
+    var seen = false
+    var pixelSize = 0
     var rightExtension = inputImage.width
     var leftExtension = inputImage.width
 

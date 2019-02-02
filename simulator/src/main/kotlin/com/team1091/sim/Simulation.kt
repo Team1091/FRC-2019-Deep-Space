@@ -20,7 +20,7 @@ import processing.core.PApplet
 import java.awt.Color
 
 
-fun main(args: Array<String>) {
+fun main() {
     PApplet.main("com.team1091.sim.Simulator")
 }
 
