@@ -2,9 +2,8 @@ package com.team1091.shared.autonomous.commands
 
 import com.team1091.shared.components.RobotSettings
 import com.team1091.shared.control.RobotComponents
-import com.team1091.shared.system.ITargetingSystem
 
-class TurnToTarget(val components: RobotComponents, private val targetingSystem: ITargetingSystem) : Command {
+class TurnToTarget(val components: RobotComponents) : Command {
 
     override fun firstRun() {
 
@@ -16,7 +15,7 @@ class TurnToTarget(val components: RobotComponents, private val targetingSystem:
 
 
         // find target - we can get if its seen
-        val turn = targetingSystem.getCenter()
+        val turn = components.targetingSystem.getCenter()
 
         // if we dont see the target, then keep waiting until its seen
         if (!turn.seen) {

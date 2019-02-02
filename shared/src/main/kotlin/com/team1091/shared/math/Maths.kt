@@ -1,20 +1,23 @@
 package com.team1091.shared.math
 
+import kotlin.math.max
+import kotlin.math.min
+
 fun moveToward(cur: Double, goal: Double, speed: Double): Double {
 
     if (cur < goal) {
-        return Math.min(cur + speed, goal)
+        return min(cur + speed, goal)
     }
     if (cur > goal) {
-        return Math.max(cur - speed, goal)
+        return max(cur - speed, goal)
     }
     return cur
 }
 
 fun clamp(value: Double): Double {
-    return Math.max(-1.0, Math.min(1.0, value))
+    return max(-1.0, min(1.0, value))
 }
 
 fun clamp(value: Double, min: Double, max: Double): Double {
-    return Math.max(min, Math.min(max, value))
+    return max(min, min(max, value))
 }

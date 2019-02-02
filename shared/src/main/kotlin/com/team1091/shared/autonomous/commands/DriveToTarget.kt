@@ -2,11 +2,9 @@ package com.team1091.shared.autonomous.commands
 
 import com.team1091.shared.components.RobotSettings
 import com.team1091.shared.control.RobotComponents
-import com.team1091.shared.system.ITargetingSystem
-import java.lang.Double.max
-import java.lang.Double.min
+import com.team1091.shared.math.clamp
 
-class DriveToTarget(val components: RobotComponents, val targetingSystem: ITargetingSystem) : Command {
+class DriveToTarget(val components: RobotComponents) : Command {
 
     override fun firstRun() {
 
@@ -18,7 +16,7 @@ class DriveToTarget(val components: RobotComponents, val targetingSystem: ITarge
 
 
         // find target - we can get if its seen
-        val turn = targetingSystem.getCenter()
+        val turn = components.targetingSystem.getCenter()
         val stoppingDistance = 1
 
         // if we don't see the target, then keep waiting until its seen
@@ -34,9 +32,11 @@ class DriveToTarget(val components: RobotComponents, val targetingSystem: ITarge
 
         // if we get to this point, we see the target
         println("Turn $turn")
-        val forwardComponent = min(
-                max(turn.distance / RobotSettings.distanceCoeffecient, RobotSettings.driveToMinMotorPower),
-                RobotSettings.driveToMotorPower)
+        val forwardComponent = clamp(turn.distance / RobotSettings.distanceCoeffecient,
+                RobotSettings.driveToMinMotorPower,
+                RobotSettings.driveToMotorPower
+        )
+
         val turnComponent = if (turn.center < 0) -0.4 else 0.4
 
         // TODO: we need to keep aligned center wise

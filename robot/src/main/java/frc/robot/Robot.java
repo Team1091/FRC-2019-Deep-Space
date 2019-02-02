@@ -49,9 +49,9 @@ public class Robot extends TimedRobot {
                         ),
                         new WrappedSolenoid(
                                 null //new Solenoid(3) // TODO: this will break the grabber
-                        )
-                ),
-                new TargetingSystem()
+                        ),
+                        new TargetingSystem()
+                )
         );
     }
 

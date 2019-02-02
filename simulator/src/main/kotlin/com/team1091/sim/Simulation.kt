@@ -46,12 +46,13 @@ class Simulator : PApplet() {
                     SimAccelerometer(),
                     SimGyroscope(),
                     SimMotor(),
-                    SimSolenoid()
+                    SimSolenoid(),
+                    SimTargetingSystem()
             )
 
             SimRobot(start,
                     25f, 30f,
-                    TeamRobotImpl(rc, SimTargetingSystem()),
+                    TeamRobotImpl(rc),
                     rc // These are needed to simulate its position.
             )
         }
@@ -120,7 +121,7 @@ class Simulator : PApplet() {
         // Draw all the robots
         for (robot in simWorld.robots) {
             draw(robot.body, robot.xSize, robot.ySize, robot.startingPos.alliance.color, true)
-            drawLine(((robot.teamRobot as TeamRobotImpl)).positionSystem)
+            drawLine(((robot.teamRobot as TeamRobotImpl)).components.positionSystem)
         }
 
         popMatrix()
