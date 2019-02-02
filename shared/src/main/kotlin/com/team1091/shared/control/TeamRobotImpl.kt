@@ -115,23 +115,25 @@ class TeamRobotImpl(
     }
 
     private fun doTeleopPeriodicManual(dt: Double) {
-        if (components.gameController.pressedRightBumper() || components.gameController.pressedLeftBumper()) {
-            return
-        }
-        // Driving
-        val (x, y) = squareACircle(
-                components.gameController.getLeftX(),
-                components.gameController.getLeftY(),
-                false
-        )
+        with(components) {
+            if (gameController.pressedRightBumper() || gameController.pressedLeftBumper()) {
+                return
+            }
+            // Driving
+            val (x, y) = squareACircle(
+                    gameController.getLeftX(),
+                    gameController.getLeftY(),
+                    false
+            )
 
-        if (components.gameController.pressedA()) {
-            components.driveSystem.arcadeDrive(y, x)
-        } else {
-            components.driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
+            if (gameController.pressedA()) {
+                driveSystem.arcadeDrive(y, x)
+            } else {
+                driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
+            }
+            // Kickstand
+            kickstandsystem.readFromController()
         }
-        // Kickstand
-        components.kickstandsystem.readFromController()
     }
 
     override fun teleopPeriodic() {
