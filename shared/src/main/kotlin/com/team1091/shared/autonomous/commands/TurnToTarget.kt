@@ -10,18 +10,34 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
     }
 
     override fun execute(dt: Double): Command? {
+
+        // This will be used for an initial turn in towards the center
+
+
+        // find target - we can get if its seen
         val turn = targetingSystem.getCenter()
-        if (turn == null) {
+
+        // if we dont see the target, then keep waiting until its seen
+        if (!turn.seen) {
             return this
         }
 
-        println("Turn " + turn)
+        // TODO: if we are there (maybe for a while), stop
+        if () {
+            return null
+        }
 
-        if (turn != 0.0)
-            components.driveSystem.arcadeDrive(0.0, if (turn < 0) -0.65 else 0.65)
+
+        // if we get to this point, we see the target
+        println("Turn ${turn}")
+
+        // TODO: we need to keep aligned center wise
+        components.driveSystem.arcadeDrive(
+                forwardAmnt = 0.0,
+                turnAmnt = if (turn.center < 0) -0.65 else 0.65
+        )
 
         return this
-        // TODO: we should check to see if we are centered and stop
     }
 
     override fun cleanUp() {

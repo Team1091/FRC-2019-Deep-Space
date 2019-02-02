@@ -1,6 +1,7 @@
 package frc.robot.components;
 
 import com.google.gson.Gson;
+import com.team1091.shared.control.ImageInfo;
 import com.team1091.shared.system.ITargetingSystem;
 
 import java.io.BufferedReader;
@@ -39,21 +40,13 @@ public class TargetingSystem implements ITargetingSystem {
     }
 
     @Override
-    public Double getCenter() {
-        if (imageInfo.seen)
-            return imageInfo.center;
-        return null;
+    public ImageInfo getCenter() {
+        return imageInfo;
     }
 
     @Override
     public void start() {
         thread.start();
-    }
-
-    class ImageInfo {
-        boolean seen = false;
-        double center = 0.0;
-        double distance = Double.MAX_VALUE;
     }
 
 }
