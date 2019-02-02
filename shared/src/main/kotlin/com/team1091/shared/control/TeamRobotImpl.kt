@@ -87,7 +87,7 @@ class TeamRobotImpl(
             println("Starting Autonomous Assistance")
             autonomousSystem.replace(CommandList(
                     TurnToTarget(components, targetingSystem),
-                    DriveToTarget(components),
+                    DriveToTarget(components, targetingSystem),
                     ReleaseDisk(grabberSystem),
                     DriveForwards(components, (-3).feet)
             ))

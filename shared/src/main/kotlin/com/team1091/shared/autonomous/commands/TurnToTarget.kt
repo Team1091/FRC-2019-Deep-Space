@@ -23,7 +23,7 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
         }
 
         // TODO: if we are there (maybe for a while), stop
-        if () {
+        if (false) {
             return null
         }
 
