@@ -1,6 +1,12 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.*
+import com.team1091.shared.autonomous.commands.CommandList
+import com.team1091.shared.autonomous.commands.DriveBackwards
+import com.team1091.shared.autonomous.commands.DriveForwards
+import com.team1091.shared.autonomous.commands.DriveToTarget
+import com.team1091.shared.autonomous.commands.GrabDisk
+import com.team1091.shared.autonomous.commands.ReleaseDisk
+import com.team1091.shared.autonomous.commands.TurnToTarget
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -17,11 +23,9 @@ class TeamRobotImpl(
         val targetingSystem: ITargetingSystem
 ) : TeamRobot {
 
-//    var toggle = true
-
     private val autonomousSystem = AutonomousSystem()
     private val grabberSystem = GrabberSystem(components.grabberSolenoid)
-    //    private val targetingSystem:ITargetingSystem
+
     lateinit var positionSystem: PositionSystem
     private var rightBumperJustPressed = false
     private var leftBumperJustPressed = false
@@ -43,14 +47,7 @@ class TeamRobotImpl(
     override fun autonomousInit() {
         autonomousSystem.init(
                 CommandList(
-//                        TurnToAngle(components, positionSystem, 90.degrees)
                         DriveForwards(components, 20.0.inches)
-//                        Wait(components, 2.seconds),
-//                        Turn(components, 90.0.degrees),
-//                        Wait(components, 2.seconds),
-//                        DriveForwards(components, 20.0.inches),
-//                        Wait(components, 2.seconds),
-//                        Turn(components, (-90.0).degrees)
                 )
         )
 
@@ -59,13 +56,6 @@ class TeamRobotImpl(
     // since we are driving in autonomous, we should just call teleopPeriodic here
     override fun autonomousPeriodic() {
         teleopPeriodic()
-//        val dt = getTime()
-//        autonomousSystem.drive(dt)
-//        positionSystem.integrate(dt)
-//
-//        components.kickstandMotor.set(0.0)
-//        components.driveSystem.drive();
-
     }
 
     override fun teleopInit() {
@@ -73,7 +63,7 @@ class TeamRobotImpl(
     }
 
     private fun doTeleopPeriodicAutonomous(dt: Double) {
-        if(components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()){
+        if (components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()) {
             println("You are pressing both buttons, clearing commands")
             autonomousSystem.replace(CommandList()) // stops current commands
             rightBumperJustPressed = true
@@ -107,7 +97,7 @@ class TeamRobotImpl(
                 leftBumperJustPressed = false
             }
 
-        } else{
+        } else {
             if (!leftBumperJustPressed) {
                 println("Starting Autonomous Assistance")
                 autonomousSystem.replace(CommandList(
@@ -149,17 +139,9 @@ class TeamRobotImpl(
         positionSystem.integrate(dt)
         doTeleopPeriodicAutonomous(dt)
         doTeleopPeriodicManual(dt)
-        components.kickstandsystem.liftAndStand();
-        components.driveSystem.drive();
+        components.kickstandsystem.liftAndStand()
+        components.driveSystem.drive()
     }
-
-
-//    fun pressStartToggle(): Boolean {
-//        if (components.gameController.getStart()) {
-//            toggle = !toggle
-//        }
-//        return toggle
-//    }
 
     override fun disabledInit() {
 
@@ -190,6 +172,5 @@ class TeamRobotImpl(
         lastFrameTime = currentTime
         return dt
     }
-
 
 }

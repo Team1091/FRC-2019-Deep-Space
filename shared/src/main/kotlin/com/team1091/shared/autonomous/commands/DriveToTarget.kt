@@ -21,7 +21,7 @@ class DriveToTarget(val components: RobotComponents, val targetingSystem: ITarge
         val turn = targetingSystem.getCenter()
         val stoppingDistance = 1
 
-        // if we dont see the target, then keep waiting until its seen
+        // if we don't see the target, then keep waiting until its seen
         if (!turn.seen) {
             return this
         }
@@ -35,7 +35,7 @@ class DriveToTarget(val components: RobotComponents, val targetingSystem: ITarge
         // if we get to this point, we see the target
         println("Turn ${turn}")
         val forwardComponent = min(
-                max(turn.distance / RobotSettings.distanceCoeffecient,RobotSettings.driveToMinMotorPower),
+                max(turn.distance / RobotSettings.distanceCoeffecient, RobotSettings.driveToMinMotorPower),
                 RobotSettings.driveToMotorPower)
         val turnComponent = if (turn.center < 0) -0.4 else 0.4
 

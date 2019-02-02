@@ -3,6 +3,7 @@ package frc.robot.components;
 import com.google.gson.Gson;
 import com.team1091.shared.control.ImageInfo;
 import com.team1091.shared.system.ITargetingSystem;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,7 +30,7 @@ public class TargetingSystem implements ITargetingSystem {
         }
     };
 
-    Thread thread = new Thread(visionUpdater);
+    private Thread thread = new Thread(visionUpdater);
 
     public TargetingSystem() {
         try {
@@ -39,6 +40,7 @@ public class TargetingSystem implements ITargetingSystem {
         }
     }
 
+    @NotNull
     @Override
     public ImageInfo getCenter() {
         return imageInfo;

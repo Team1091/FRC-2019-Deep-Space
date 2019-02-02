@@ -23,7 +23,7 @@ class TurnToTarget(val components: RobotComponents, val targetingSystem: ITarget
             return this
         }
 
-        if (RobotSettings.centerZeroMargin > Math.abs(turn.center)){
+        if (RobotSettings.centerZeroMargin > Math.abs(turn.center)) {
             return null
         }
 

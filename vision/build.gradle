@@ -39,7 +39,7 @@ compileTestKotlin {
 }
 
 
-task visionRobot(type:JavaExec){
+task visionRobot(type: JavaExec) {
     group "team1091"
     description "Run the vision code using the robot."
 

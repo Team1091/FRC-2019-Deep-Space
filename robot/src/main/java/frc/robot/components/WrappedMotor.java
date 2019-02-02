@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj.Victor;
 public class WrappedMotor implements IMotorController {
 
     Victor victor;
+
     public WrappedMotor(Victor victor) {
         this.victor = victor;
     }
 
-    public void set(double speed){
+    public void set(double speed) {
         victor.set(speed);
     }
 

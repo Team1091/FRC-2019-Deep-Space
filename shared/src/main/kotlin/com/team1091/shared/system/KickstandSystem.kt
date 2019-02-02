@@ -4,7 +4,7 @@ import com.team1091.shared.components.IGameController
 import com.team1091.shared.components.IMotorController
 
 
-class KickstandSystem(val drive: IMotorController, val controller:IGameController) {
+class KickstandSystem(val drive: IMotorController, val controller: IGameController) {
 
     var kickstandPower = 0.0;
 
@@ -14,7 +14,7 @@ class KickstandSystem(val drive: IMotorController, val controller:IGameControlle
         kickstandPower = 0.0;
     }
 
-    fun readFromController(){
+    fun readFromController() {
         val kickstandPower = if (controller.pressedY()) {
             0.5
         } else if (controller.pressedB()) {

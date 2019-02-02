@@ -4,7 +4,6 @@ import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode
 import com.google.gson.Gson
-import spark.Spark
 import spark.Spark.exception
 import spark.Spark.get
 import java.awt.Color

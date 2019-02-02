@@ -1,6 +1,6 @@
 package com.team1091.shared.components
 
-class RobotSettings(){
+class RobotSettings() {
     companion object {
         val centerZeroMargin = 0.1
         val distanceCoeffecient = 50.00

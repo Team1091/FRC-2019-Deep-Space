@@ -1,15 +1,13 @@
 package frc.robot;
 
 //import com.kauailabs.navx.frc.AHRS;
+
 import com.team1091.shared.control.RobotComponents;
 import com.team1091.shared.control.TeamRobot;
 import com.team1091.shared.control.TeamRobotImpl;
 import com.team1091.shared.game.StartingPos;
-import com.team1091.shared.system.GrabberSystem;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
 import frc.robot.components.TargetingSystem;
@@ -21,8 +19,6 @@ import frc.robot.components.WrappedMotor;
 import frc.robot.components.WrappedSolenoid;
 import frc.robot.components.WrappedXBox;
 
-import java.net.MalformedURLException;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -33,7 +29,7 @@ import java.net.MalformedURLException;
 public class Robot extends TimedRobot {
     private final TeamRobot teamRobot;
 
-    Robot()  {
+    Robot() {
 //        AHRS accel = new AHRS(SerialPort.Port.kUSB);
         // create real components wrapped and send them to the other project
         // then delegate to our shared code

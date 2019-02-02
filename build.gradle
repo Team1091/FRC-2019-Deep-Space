@@ -35,7 +35,7 @@ task compileAndDeploy() {
     }
 }
 
-task runSim(type:JavaExec) {
+task runSim(type: JavaExec) {
     group "team1091"
     description "Run the simulation"
     finalizedBy("simulator:run")

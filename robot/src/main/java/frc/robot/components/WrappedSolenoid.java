@@ -7,7 +7,7 @@ public class WrappedSolenoid implements ISolenoid {
 
     private Solenoid solenoid;
 
-    public WrappedSolenoid(Solenoid solenoid){
+    public WrappedSolenoid(Solenoid solenoid) {
         this.solenoid = solenoid;
     }
 
