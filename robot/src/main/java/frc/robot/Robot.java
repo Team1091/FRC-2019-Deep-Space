@@ -8,6 +8,7 @@ import com.team1091.shared.control.TeamRobotImpl;
 import com.team1091.shared.game.StartingPos;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
 import frc.robot.components.TargetingSystem;
@@ -45,10 +46,10 @@ public class Robot extends TimedRobot {
                         new WrappedAccelerometer(),
                         new WrappedGyroscope(),
                         new WrappedMotor(
-                                new Victor(2) //Update channel
+                                new Victor(2) // Lift Motor
                         ),
                         new WrappedSolenoid(
-                                null //new Solenoid(3) // TODO: this will break the grabber
+                                new Solenoid(3) // grabber
                         ),
                         new TargetingSystem()
                 )
