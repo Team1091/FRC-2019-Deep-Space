@@ -32,12 +32,13 @@ class SimTest {
                     SimAccelerometer(),
                     SimGyroscope(),
                     SimMotor(),
-                    SimSolenoid()
+                    SimSolenoid(),
+                    SimTargetingSystem()
             )
 
             SimRobot(StartingPos.values()[id],
                     25f, 30f,
-                    TeamRobotImpl(rc, SimTargetingSystem()),
+                    TeamRobotImpl(rc),
                     rc
             )
         }
