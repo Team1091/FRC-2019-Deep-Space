@@ -55,56 +55,59 @@ class TeamRobotImpl(
 
     }
 
-    private fun doTeleopPeriodicAutonomous(dt: Double) {
-        if (components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()) {
-            println("You are pressing both buttons, clearing commands")
-            components.autonomousSystem.replace(CommandList()) // stops current commands
-            rightBumperJustPressed = true
-            leftBumperJustPressed = true
-        }
-
+    private fun doAutonomousScore(){
         if (!components.gameController.pressedRightBumper()) {
             if (rightBumperJustPressed) { // and now is not
-                println("Autonomous  let go")
+                println("Autonomous let go")
                 components.autonomousSystem.replace(CommandList()) // stops current commands
                 rightBumperJustPressed = false
             }
-
-        } else {
-            if (!rightBumperJustPressed) {
-                println("Starting Autonomous Assistance")
-                components.autonomousSystem.replace(CommandList(
-                        TurnToTarget(components),
-                        DriveToTarget(components),
-                        ReleaseDisk(components.grabberSystem),
-                        DriveBackwards(components, (3).feet)
-                ))
-            }
-            rightBumperJustPressed = true
+            return
         }
+        if (!rightBumperJustPressed) {
+            println("Starting Autonomous Assistance")
+            components.autonomousSystem.replace(CommandList(
+                    TurnToTarget(components),
+                    DriveToTarget(components),
+                    ReleaseDisk(components.grabberSystem),
+                    DriveBackwards(components, (3).feet)
+            ))
+        }
+        rightBumperJustPressed = true
+    }
 
+    private fun doAutonomousDiskPickup(){
         if (!components.gameController.pressedLeftBumper()) {
             if (leftBumperJustPressed) { // and now is not
                 println("Autonomous  let go")
                 components.autonomousSystem.replace(CommandList()) // stops current commands
                 leftBumperJustPressed = false
             }
-
-        } else {
-            if (!leftBumperJustPressed) {
-                println("Starting Autonomous Assistance")
-                components.autonomousSystem.replace(CommandList(
-                        TurnToTarget(components),
-                        DriveToTarget(components),
-                        GrabDisk(components.grabberSystem),
-                        DriveBackwards(components, (3).feet)
-                ))
-            }
-            leftBumperJustPressed = true
+            return
         }
+        if (!leftBumperJustPressed) {
+            println("Starting Autonomous Assistance")
+            components.autonomousSystem.replace(CommandList(
+                TurnToTarget(components),
+                DriveToTarget(components),
+                GrabDisk(components.grabberSystem),
+                DriveBackwards(components, (3).feet)
+            ))
+        }
+        leftBumperJustPressed = true
+    }
 
+    private fun doTeleopPeriodicAutonomous(dt: Double) {
+        if (components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()) {
+            println("You are pressing both buttons, clearing commands")
+            components.autonomousSystem.replace(CommandList()) // stops current commands
+            rightBumperJustPressed = true
+            leftBumperJustPressed = true
+            return
+        }
+        doAutonomousDiskPickup()
+        doAutonomousScore()
         components.autonomousSystem.drive(dt)
-
     }
 
     private fun doTeleopPeriodicManual(dt: Double) {

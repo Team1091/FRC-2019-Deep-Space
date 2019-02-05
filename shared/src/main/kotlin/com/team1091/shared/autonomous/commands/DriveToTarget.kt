@@ -38,9 +38,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
         )
 
         val turnComponent = if (turn.center < 0) -0.4 else 0.4
-
-        // TODO: we need to keep aligned center wise
-        //TODO: Figure out a min so Mr. roboto doesn't stop
+        
         components.driveSystem.arcadeDrive(
                 forwardComponent,
                 turnComponent
