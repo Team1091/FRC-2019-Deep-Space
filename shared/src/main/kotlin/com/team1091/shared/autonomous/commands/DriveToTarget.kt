@@ -41,15 +41,16 @@ class DriveToTarget(val components: RobotComponents) : Command {
 
         components.driveSystem.arcadeDrive(
                 forwardComponent,
-                turnComponent
+                turnComponent,
+                dt
         )
 
         return this
 
     }
 
-    override fun cleanUp() {
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+    override fun cleanUp(dt: Double) {
+        components.driveSystem.arcadeDrive(0.0, 0.0, dt)
     }
 
 }

@@ -30,7 +30,7 @@ class CommandList : Command {
         val next = first.execute(dt)
 
         if (next == null) {
-            first.cleanUp()
+            first.cleanUp(dt)
 
             // Current command is done, go to the next
             if (commands.size == 1)
@@ -41,14 +41,14 @@ class CommandList : Command {
 
         } else if (next !== first) {
             // Replace current command
-            commands[0].cleanUp()
+            commands[0].cleanUp(dt)
             commands[0] = next
             commands[0].firstRun()
         }
         return this
     }
 
-    override fun cleanUp() {
+    override fun cleanUp(dt:Double) {
 
     }
 

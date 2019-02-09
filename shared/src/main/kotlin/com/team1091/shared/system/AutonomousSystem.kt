@@ -10,8 +10,8 @@ class AutonomousSystem {
         this.command?.firstRun()
     }
 
-    fun replace(command: Command) {
-        this.command?.cleanUp()
+    fun replace(command: Command, dt:Double) {
+        this.command?.cleanUp(dt)
         command.firstRun()
         this.command = command
     }
@@ -25,7 +25,7 @@ class AutonomousSystem {
         val next = command!!.execute(dt)
 
         if (next != command) {
-            command!!.cleanUp()
+            command!!.cleanUp(dt)
             next?.firstRun()
         }
 

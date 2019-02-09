@@ -50,11 +50,11 @@ class TeamRobotImpl(
 
     }
 
-    private fun doAutonomousScore() {
+    private fun doAutonomousScore(dt:Double) {
         if (!components.gameController.pressedRightBumper()) {
             if (rightBumperJustPressed) { // and now is not
                 println("Autonomous let go")
-                components.autonomousSystem.replace(CommandList()) // stops current commands
+                components.autonomousSystem.replace(CommandList(),dt) // stops current commands
                 rightBumperJustPressed = false
             }
             return
@@ -66,16 +66,16 @@ class TeamRobotImpl(
                     DriveToTarget(components),
                     ReleaseDisk(components.grabberSystem),
                     DriveBackwards(components, (3).feet)
-            ))
+            ), dt)
         }
         rightBumperJustPressed = true
     }
 
-    private fun doAutonomousDiskPickup() {
+    private fun doAutonomousDiskPickup(dt:Double) {
         if (!components.gameController.pressedLeftBumper()) {
             if (leftBumperJustPressed) { // and now is not
                 println("Autonomous  let go")
-                components.autonomousSystem.replace(CommandList()) // stops current commands
+                components.autonomousSystem.replace(CommandList(), dt) // stops current commands
                 leftBumperJustPressed = false
             }
             return
@@ -87,7 +87,7 @@ class TeamRobotImpl(
                     DriveToTarget(components),
                     GrabDisk(components.grabberSystem),
                     DriveBackwards(components, (3).feet)
-            ))
+            ), dt)
         }
         leftBumperJustPressed = true
     }
@@ -95,13 +95,13 @@ class TeamRobotImpl(
     private fun doTeleopPeriodicAutonomous(dt: Double) {
         if (components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()) {
             println("You are pressing both buttons, clearing commands")
-            components.autonomousSystem.replace(CommandList()) // stops current commands
+            components.autonomousSystem.replace(CommandList(), dt) // stops current commands
             rightBumperJustPressed = true
             leftBumperJustPressed = true
             return
         }
-        doAutonomousDiskPickup()
-        doAutonomousScore()
+        doAutonomousDiskPickup(dt)
+        doAutonomousScore(dt)
         components.autonomousSystem.drive(dt)
     }
 
@@ -118,9 +118,9 @@ class TeamRobotImpl(
             )
 
             if (gameController.pressedA()) {
-                driveSystem.arcadeDrive(y, x)
+                driveSystem.arcadeDrive(y, x, dt)
             } else {
-                driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
+                driveSystem.arcadeDrive(0.7 * y, 0.7 * x, dt)
             }
             // Kickstand
             kickstandsystem.readFromController()

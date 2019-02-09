@@ -19,14 +19,14 @@ open class DriveForwards(
 
         if (forwards) {
             if (components.leftEncoder.get() < distance.toInches()) {
-                components.driveSystem.arcadeDrive(1.0, 0.0)
+                components.driveSystem.arcadeDrive(1.0, 0.0, dt)
                 return this
             }
             return null
 
         } else { // backwards
             if (components.leftEncoder.get() > distance.toInches()) {
-                components.driveSystem.arcadeDrive(-1.0, 0.0)
+                components.driveSystem.arcadeDrive(-1.0, 0.0, dt)
                 return this
             }
             return null
@@ -36,9 +36,9 @@ open class DriveForwards(
 
     }
 
-    override fun cleanUp() {
+    override fun cleanUp(dt: Double) {
         println("Drive Cleaning")
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        components.driveSystem.arcadeDrive(0.0, 0.0, dt)
     }
 
 //    override fun getMessage(): String =

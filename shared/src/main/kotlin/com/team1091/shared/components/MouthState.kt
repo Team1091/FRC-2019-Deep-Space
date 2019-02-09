@@ -3,86 +3,86 @@ package com.team1091.shared.components
 import com.team1091.shared.system.IGrabberSystem
 
 enum class MouthState(
-        val gotoExtendedClosed: (grabberSytstem: IGrabberSystem) -> MouthState,
-        val gotoExtendedOpen: (grabberSytstem: IGrabberSystem) -> MouthState,
-        val gotoWithdrawnClosed: (grabberSytstem: IGrabberSystem) -> MouthState,
-        val gotoWithdrawnOpen: (grabberSytstem: IGrabberSystem) -> MouthState
+        val gotoExtendedClosed: (grabberSystem: IGrabberSystem) -> MouthState,
+        val gotoExtendedOpen: (grabberSystem: IGrabberSystem) -> MouthState,
+        val gotoWithdrawnClosed: (grabberSystem: IGrabberSystem) -> MouthState,
+        val gotoWithdrawnOpen: (grabberSystem: IGrabberSystem) -> MouthState
 ) {
     S1ExtendedClose(
             gotoExtendedClosed = {
-                grabberSytstem -> S1ExtendedClose
+                grabberSystem -> S1ExtendedClose
             },
             gotoExtendedOpen = {
-                grabberSytstem -> grabberSytstem.open()
+                grabberSystem -> grabberSystem.open()
                 S1ExtendedClose
             },
-            gotoWithdrawnClosed = { grabberSytstem ->
-                grabberSytstem.withdraw()
+            gotoWithdrawnClosed = { grabberSystem ->
+                grabberSystem.withdraw()
                 S1ExtendedClose
             },
-            gotoWithdrawnOpen = { grabberSytstem ->
-                if (grabberSytstem.isOpen())
+            gotoWithdrawnOpen = { grabberSystem ->
+                if (grabberSystem.isOpen())
                 {
-                    grabberSytstem.withdraw()
+                    grabberSystem.withdraw()
                 }else{
-                    grabberSytstem.open()
+                    grabberSystem.open()
                 }
                 S1ExtendedClose
             }
     ),
     S2ExtendedOpen(
-            gotoExtendedClosed = { grabberSytstem ->
-                grabberSytstem.open()
+            gotoExtendedClosed = { grabberSystem ->
+                grabberSystem.open()
                 S2ExtendedOpen
             },
             gotoExtendedOpen = {
                 S2ExtendedOpen
             },
-            gotoWithdrawnClosed = { grabberSytstem ->
-                if (grabberSytstem.isOpen())
+            gotoWithdrawnClosed = { grabberSystem ->
+                if (grabberSystem.isOpen())
                 {
-                    grabberSytstem.closed()
+                    grabberSystem.closed()
                 }else{
-                    grabberSytstem.withdraw()
+                    grabberSystem.withdraw()
                 }
                 S2ExtendedOpen
             },
-            gotoWithdrawnOpen = { grabberSytstem ->
-                grabberSytstem.withdraw()
+            gotoWithdrawnOpen = { grabberSystem ->
+                grabberSystem.withdraw()
                 S2ExtendedOpen
             }
     ),
     S3WithdrawnClose(
             gotoExtendedClosed ={
-                grabberSytstem ->
-                grabberSytstem.extend()
+                grabberSystem ->
+                grabberSystem.extend()
                 S3WithdrawnClose
             },
-            gotoExtendedOpen = { grabberSytstem ->
-                if (grabberSytstem.isExtended()){
-                    grabberSytstem.open()
+            gotoExtendedOpen = { grabberSystem ->
+                if (grabberSystem.isExtended()){
+                    grabberSystem.open()
                 }
                 else
                 {
-                    grabberSytstem.extend()
+                    grabberSystem.extend()
                 }
                 S3WithdrawnClose
             },
-            gotoWithdrawnClosed = { grabberSytstem ->
+            gotoWithdrawnClosed = { grabberSystem ->
                 S3WithdrawnClose
             },
-            gotoWithdrawnOpen = { grabberSytstem ->
-                grabberSytstem.open()
+            gotoWithdrawnOpen = { grabberSystem ->
+                grabberSystem.open()
                 S3WithdrawnClose
             }
     ),
     S4WithdrawnOpen(
             gotoExtendedClosed ={
-                grabberSytstem ->
-                if(grabberSytstem.isExtended()) {
-                    grabberSytstem.closed()
+                grabberSystem ->
+                if(grabberSystem.isExtended()) {
+                    grabberSystem.closed()
                 }else{
-                    grabberSytstem.extend()
+                    grabberSystem.extend()
                 }
                 S4WithdrawnOpen
             },
@@ -90,11 +90,11 @@ enum class MouthState(
                 grabberSystem.extend()
                 S4WithdrawnOpen
             },
-            gotoWithdrawnClosed = { grabberSytstem ->
-                grabberSytstem.closed()
+            gotoWithdrawnClosed = { grabberSystem ->
+                grabberSystem.closed()
                 S4WithdrawnOpen
             },
-            gotoWithdrawnOpen = { grabberSytstem ->
+            gotoWithdrawnOpen = { grabberSystem ->
                 S4WithdrawnOpen
             }
     )

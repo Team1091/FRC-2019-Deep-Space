@@ -7,6 +7,13 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class SimDrive(val linearForce: Double, val rotationForce: Double) : IDrive {
+    override fun getCurrentRotation(): Double {
+        return 0.0
+    }
+
+    override fun getCurrentLinear(): Double {
+        return 0.0
+    }
 
     var linearAccel: Double = 0.0
     var rotationalAccel: Double = 0.0

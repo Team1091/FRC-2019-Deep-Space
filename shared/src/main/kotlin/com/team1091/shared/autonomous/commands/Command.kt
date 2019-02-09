@@ -4,7 +4,7 @@ interface Command {
 
     fun firstRun()
     fun execute(dt: Double): Command?
-    fun cleanUp()
+    fun cleanUp(dt: Double)
 
     fun getMessage(): String {
         return this.javaClass.toString()

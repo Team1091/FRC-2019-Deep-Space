@@ -43,15 +43,15 @@ class TurnToAngle(val components: RobotComponents, val positionSystem: PositionS
 
         val output = kP * (goal - position) - kD * speed
 
-        components.driveSystem.arcadeDrive(0.0, output)
+        components.driveSystem.arcadeDrive(0.0, output, dt)
 
         return this
 
     }
 
-    override fun cleanUp() {
+    override fun cleanUp(dt: Double) {
         println("Turn Done")
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        components.driveSystem.arcadeDrive(0.0, 0.0, dt)
     }
 
 }

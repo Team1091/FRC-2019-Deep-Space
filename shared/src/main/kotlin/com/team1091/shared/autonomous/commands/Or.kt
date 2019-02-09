@@ -31,8 +31,8 @@ class Or : Command {
         return this
     }
 
-    override fun cleanUp() {
-        commands.forEach { it.cleanUp() }
+    override fun cleanUp(dt:Double) {
+        commands.forEach { it.cleanUp(dt) }
     }
 
     override fun getMessage(): String {

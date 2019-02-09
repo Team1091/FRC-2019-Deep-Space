@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class WrappedDrive implements IDrive {
     private final DifferentialDrive differentialDrive;
+    private double speed = 0;
+    private double turn = 0;
 
     public WrappedDrive(SpeedController scLeft, SpeedController scRight) {
         differentialDrive = new DifferentialDrive(scLeft, scRight);
@@ -14,6 +16,17 @@ public class WrappedDrive implements IDrive {
     @Override
     public void arcadeDrive(double speed, double turn) {
         differentialDrive.arcadeDrive(speed, turn);
+        this.speed = speed;
+        this.turn = turn;
     }
 
+    @Override
+    public double getCurrentLinear() {
+        return speed;
+    }
+
+    @Override
+    public double getCurrentRotation() {
+        return turn;
+    }
 }

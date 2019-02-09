@@ -12,7 +12,7 @@ class GrabDisk(val grabberSystem: GrabberSystem) : Command {
         return null
     }
 
-    override fun cleanUp() {
+    override fun cleanUp(dt:Double) {
     }
 
 

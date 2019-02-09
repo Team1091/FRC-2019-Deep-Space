@@ -27,6 +27,7 @@ class SimTest {
                     SimGyroscope(),
                     SimMotor(),
                     SimSolenoid(),
+                    SimSolenoid(),
                     SimTargetingSystem()
             )
 
