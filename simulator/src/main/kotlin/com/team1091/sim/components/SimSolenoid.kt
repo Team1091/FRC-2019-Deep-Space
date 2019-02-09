@@ -7,4 +7,7 @@ class SimSolenoid : ISolenoid {
     override fun set(value: Boolean?) {
     }
 
+    override fun get():Boolean? {
+        return false
+    }
 }

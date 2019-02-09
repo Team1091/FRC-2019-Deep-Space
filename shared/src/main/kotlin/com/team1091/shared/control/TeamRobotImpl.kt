@@ -1,6 +1,7 @@
 package com.team1091.shared.control
 
 import com.team1091.shared.autonomous.commands.*
+import com.team1091.shared.components.MouthState
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -123,10 +124,9 @@ class TeamRobotImpl(
             }
             // Kickstand
             kickstandsystem.readFromController()
-            // Grabber Test
-            if (gameController.getStart()) {
-                grabberSystem.grab()
-            } else grabberSystem.release()
+            // Grabber
+            grabberSystem.readFromController()
+            grabberSystem.doWork(dt)
         }
     }
 

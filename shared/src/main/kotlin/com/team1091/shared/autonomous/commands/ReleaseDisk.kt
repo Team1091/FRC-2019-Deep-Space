@@ -9,7 +9,7 @@ class ReleaseDisk(val grabberSystem: GrabberSystem) : Command {
     }
 
     override fun execute(dt: Double): Command? {
-        grabberSystem.release()
+        grabberSystem.closed()
         return null
     }
 

@@ -20,4 +20,16 @@ public class WrappedSolenoid implements ISolenoid {
             solenoid.set(DoubleSolenoid.Value.kReverse);
         }
     }
+
+    public Boolean get() {
+        var value = solenoid.get();
+        if(value == DoubleSolenoid.Value.kOff) {
+            return null;
+        }
+        else if(value == DoubleSolenoid.Value.kForward){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
