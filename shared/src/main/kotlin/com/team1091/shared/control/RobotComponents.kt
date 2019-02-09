@@ -23,7 +23,7 @@ class RobotComponents(
         val accelerometer: IAccelerometer,
         val gyroscope: IGyroscope,
         kickstandMotor: IMotorController,
-        grabberSolenoid: ISolenoid,
+        grabberSolenoid: ISolenoid?,
         val targetingSystem: ITargetingSystem
 ) {
     val driveSystem = DriveSystem(drive)

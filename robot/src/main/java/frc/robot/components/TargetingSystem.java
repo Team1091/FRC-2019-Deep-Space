@@ -48,7 +48,8 @@ public class TargetingSystem implements ITargetingSystem {
 
     @Override
     public void start() {
-        thread.start();
+
+        //thread.start();
     }
 
 }

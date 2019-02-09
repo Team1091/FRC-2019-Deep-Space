@@ -48,9 +48,9 @@ public class Robot extends TimedRobot {
                         new WrappedMotor(
                                 new Victor(2) // Lift Motor
                         ),
-                        new WrappedSolenoid(
+                        /*new WrappedSolenoid(
                                 new Solenoid(3) // grabber
-                        ),
+                        )*/ null,
                         new TargetingSystem()
                 )
         );

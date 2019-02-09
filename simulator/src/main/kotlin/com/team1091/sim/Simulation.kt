@@ -46,7 +46,7 @@ class Simulator : PApplet() {
                     SimAccelerometer(),
                     SimGyroscope(),
                     SimMotor(),
-                    SimSolenoid(),
+                    /*SimSolenoid()*/null,
                     SimTargetingSystem()
             )
 
