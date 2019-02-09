@@ -8,17 +8,10 @@ import com.team1091.shared.control.TeamRobotImpl;
 import com.team1091.shared.game.StartingPos;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
-import frc.robot.components.TargetingSystem;
-import frc.robot.components.WrappedAccelerometer;
-import frc.robot.components.WrappedDrive;
-import frc.robot.components.WrappedEncoder;
-import frc.robot.components.WrappedGyroscope;
-import frc.robot.components.WrappedMotor;
-import frc.robot.components.WrappedSolenoid;
-import frc.robot.components.WrappedXBox;
+import frc.robot.components.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -48,9 +41,12 @@ public class Robot extends TimedRobot {
                         new WrappedMotor(
                                 new Victor(2) // Lift Motor
                         ),
-                        /*new WrappedSolenoid(
-                                new Solenoid(3) // grabber
-                        )*/ null,
+                        new WrappedSolenoid(
+                                new DoubleSolenoid(0, 1) // grabber
+                        ),
+                        new WrappedSolenoid(
+                                new DoubleSolenoid(2, 3) // grabber
+                        ),
                         new TargetingSystem()
                 )
         );

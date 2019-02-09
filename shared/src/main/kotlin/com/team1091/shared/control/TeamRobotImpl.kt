@@ -1,12 +1,6 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.CommandList
-import com.team1091.shared.autonomous.commands.DriveBackwards
-import com.team1091.shared.autonomous.commands.DriveForwards
-import com.team1091.shared.autonomous.commands.DriveToTarget
-import com.team1091.shared.autonomous.commands.GrabDisk
-import com.team1091.shared.autonomous.commands.ReleaseDisk
-import com.team1091.shared.autonomous.commands.TurnToTarget
+import com.team1091.shared.autonomous.commands.*
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -55,7 +49,7 @@ class TeamRobotImpl(
 
     }
 
-    private fun doAutonomousScore(){
+    private fun doAutonomousScore() {
         if (!components.gameController.pressedRightBumper()) {
             if (rightBumperJustPressed) { // and now is not
                 println("Autonomous let go")
@@ -76,7 +70,7 @@ class TeamRobotImpl(
         rightBumperJustPressed = true
     }
 
-    private fun doAutonomousDiskPickup(){
+    private fun doAutonomousDiskPickup() {
         if (!components.gameController.pressedLeftBumper()) {
             if (leftBumperJustPressed) { // and now is not
                 println("Autonomous  let go")
@@ -88,10 +82,10 @@ class TeamRobotImpl(
         if (!leftBumperJustPressed) {
             println("Starting Autonomous Assistance")
             components.autonomousSystem.replace(CommandList(
-                TurnToTarget(components),
-                DriveToTarget(components),
-                GrabDisk(components.grabberSystem),
-                DriveBackwards(components, (3).feet)
+                    TurnToTarget(components),
+                    DriveToTarget(components),
+                    GrabDisk(components.grabberSystem),
+                    DriveBackwards(components, (3).feet)
             ))
         }
         leftBumperJustPressed = true
@@ -129,6 +123,10 @@ class TeamRobotImpl(
             }
             // Kickstand
             kickstandsystem.readFromController()
+            // Grabber Test
+            if (gameController.getStart()) {
+                grabberSystem.grab()
+            } else grabberSystem.release()
         }
     }
 
