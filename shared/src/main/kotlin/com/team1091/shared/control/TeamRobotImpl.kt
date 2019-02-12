@@ -118,9 +118,9 @@ class TeamRobotImpl(
             )
 
             if (gameController.pressedA()) {
-                driveSystem.arcadeDrive(y, x, dt)
+                driveSystem.arcadeDrive(y, x)
             } else {
-                driveSystem.arcadeDrive(0.7 * y, 0.7 * x, dt)
+                driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
             }
             // Kickstand
             kickstandsystem.readFromController()
@@ -136,7 +136,7 @@ class TeamRobotImpl(
         doTeleopPeriodicAutonomous(dt)
         doTeleopPeriodicManual(dt)
         components.kickstandsystem.liftAndStand()
-        components.driveSystem.drive()
+        components.driveSystem.drive(dt)
     }
 
     override fun disabledInit() {

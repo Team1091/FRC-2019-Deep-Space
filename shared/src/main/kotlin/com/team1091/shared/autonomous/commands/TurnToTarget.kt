@@ -31,16 +31,15 @@ class TurnToTarget(val components: RobotComponents) : Command {
         println("Turn $turn")
 
         components.driveSystem.arcadeDrive(
-                forwardAmnt = 0.0,
-                turnAmnt = if (turn.center < 0) -0.65 else 0.65,
-                dt = dt
+                0.0,
+                if (turn.center < 0) -0.65 else 0.65
         )
 
         return this
     }
 
     override fun cleanUp(dt:Double) {
-        components.driveSystem.arcadeDrive(0.0, 0.0, dt)
+        components.driveSystem.arcadeDrive(0.0, 0.0)
 
     }
 

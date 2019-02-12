@@ -41,8 +41,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
 
         components.driveSystem.arcadeDrive(
                 forwardComponent,
-                turnComponent,
-                dt
+                turnComponent
         )
 
         return this
@@ -50,7 +49,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
     }
 
     override fun cleanUp(dt: Double) {
-        components.driveSystem.arcadeDrive(0.0, 0.0, dt)
+        components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 }

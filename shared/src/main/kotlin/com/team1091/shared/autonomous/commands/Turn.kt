@@ -24,11 +24,11 @@ class Turn(val components: RobotComponents, turnDegrees: Rotation) : Command {
 
         if (difference > requiredTurnDistance) {
             // We have turned far enough, we are done
-            components.driveSystem.arcadeDrive(0.0, 0.0, dt)
+            components.driveSystem.arcadeDrive(0.0, 0.0)
             return null
 
         } else {
-            components.driveSystem.arcadeDrive(0.0, if (isTurnRight) 1.0 else -1.0, dt)
+            components.driveSystem.arcadeDrive(0.0, if (isTurnRight) 1.0 else -1.0)
             return this
         }
 
@@ -36,7 +36,7 @@ class Turn(val components: RobotComponents, turnDegrees: Rotation) : Command {
 
     override fun cleanUp(dt: Double) {
         println("Turn Done")
-        components.driveSystem.arcadeDrive(0.0, 0.0, dt)
+        components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 //    override fun getMessage(): String =
