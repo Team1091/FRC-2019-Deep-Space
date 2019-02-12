@@ -61,7 +61,6 @@ public class Robot extends TimedRobot {
         camera.setExposureManual(20);
         camera.setWhiteBalanceManual(50);
 
-        // TODO: get this from the field or dropdown
         StartingPos pos = StartingPos.BLUE_1;
         teamRobot.robotInit(pos);
     }

@@ -118,7 +118,7 @@ class TeamRobotImpl(
             )
 
             if (gameController.pressedA()) {
-                driveSystem.arcadeDrive(y, x)
+                driveSystem.arcadeDrive(y, 0.7 * x)
             } else {
                 driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
             }

@@ -5,7 +5,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-val maxAccel = 4.0
+val maxAccel = 6.0
 
 class DriveSystem(val drive: IDrive) {
     var targForwardAmnt = 0.0

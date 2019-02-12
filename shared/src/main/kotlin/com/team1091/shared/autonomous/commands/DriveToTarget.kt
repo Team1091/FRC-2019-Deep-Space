@@ -24,7 +24,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
             return this
         }
 
-        // TODO: if we are there (maybe for a while), stop
+        // if we are there (maybe for a while), stop
         if (turn.distance >= stoppingDistance) {
             return null
         }
