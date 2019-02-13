@@ -9,11 +9,11 @@ enum class MouthState(
         val gotoWithdrawnOpen: (grabberSystem: IGrabberSystem) -> MouthState
 ) {
     S1ExtendedClose(
-            gotoExtendedClosed = {
-                grabberSystem -> S1ExtendedClose
+            gotoExtendedClosed = { grabberSystem ->
+                S1ExtendedClose
             },
-            gotoExtendedOpen = {
-                grabberSystem -> grabberSystem.open()
+            gotoExtendedOpen = { grabberSystem ->
+                grabberSystem.open()
                 S1ExtendedClose
             },
             gotoWithdrawnClosed = { grabberSystem ->
@@ -21,10 +21,9 @@ enum class MouthState(
                 S1ExtendedClose
             },
             gotoWithdrawnOpen = { grabberSystem ->
-                if (grabberSystem.isOpen())
-                {
+                if (grabberSystem.isOpen()) {
                     grabberSystem.withdraw()
-                }else{
+                } else {
                     grabberSystem.open()
                 }
                 S1ExtendedClose
@@ -39,10 +38,9 @@ enum class MouthState(
                 S2ExtendedOpen
             },
             gotoWithdrawnClosed = { grabberSystem ->
-                if (grabberSystem.isOpen())
-                {
+                if (grabberSystem.isOpen()) {
                     grabberSystem.closed()
-                }else{
+                } else {
                     grabberSystem.withdraw()
                 }
                 S2ExtendedOpen
@@ -53,17 +51,14 @@ enum class MouthState(
             }
     ),
     S3WithdrawnClose(
-            gotoExtendedClosed ={
-                grabberSystem ->
+            gotoExtendedClosed = { grabberSystem ->
                 grabberSystem.extend()
                 S3WithdrawnClose
             },
             gotoExtendedOpen = { grabberSystem ->
-                if (grabberSystem.isExtended()){
+                if (grabberSystem.isExtended()) {
                     grabberSystem.open()
-                }
-                else
-                {
+                } else {
                     grabberSystem.extend()
                 }
                 S3WithdrawnClose
@@ -77,11 +72,10 @@ enum class MouthState(
             }
     ),
     S4WithdrawnOpen(
-            gotoExtendedClosed ={
-                grabberSystem ->
-                if(grabberSystem.isExtended()) {
+            gotoExtendedClosed = { grabberSystem ->
+                if (grabberSystem.isExtended()) {
                     grabberSystem.closed()
-                }else{
+                } else {
                     grabberSystem.extend()
                 }
                 S4WithdrawnOpen

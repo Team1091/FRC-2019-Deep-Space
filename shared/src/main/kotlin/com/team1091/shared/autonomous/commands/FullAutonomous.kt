@@ -19,7 +19,7 @@ class FullAutonomous(val components: RobotComponents) : Command {
         return null
     }
 
-    override fun cleanUp(dt:Double) {
+    override fun cleanUp(dt: Double) {
 
     }
 

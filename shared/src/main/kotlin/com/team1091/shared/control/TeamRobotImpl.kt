@@ -1,7 +1,12 @@
 package com.team1091.shared.control
 
-import com.team1091.shared.autonomous.commands.*
-import com.team1091.shared.components.MouthState
+import com.team1091.shared.autonomous.commands.CommandList
+import com.team1091.shared.autonomous.commands.DriveBackwards
+import com.team1091.shared.autonomous.commands.DriveForwards
+import com.team1091.shared.autonomous.commands.DriveToTarget
+import com.team1091.shared.autonomous.commands.GrabDisk
+import com.team1091.shared.autonomous.commands.ReleaseDisk
+import com.team1091.shared.autonomous.commands.TurnToTarget
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
@@ -50,11 +55,11 @@ class TeamRobotImpl(
 
     }
 
-    private fun doAutonomousScore(dt:Double) {
+    private fun doAutonomousScore(dt: Double) {
         if (!components.gameController.pressedRightBumper()) {
             if (rightBumperJustPressed) { // and now is not
                 println("Autonomous let go")
-                components.autonomousSystem.replace(CommandList(),dt) // stops current commands
+                components.autonomousSystem.replace(CommandList(), dt) // stops current commands
                 rightBumperJustPressed = false
             }
             return
@@ -71,7 +76,7 @@ class TeamRobotImpl(
         rightBumperJustPressed = true
     }
 
-    private fun doAutonomousDiskPickup(dt:Double) {
+    private fun doAutonomousDiskPickup(dt: Double) {
         if (!components.gameController.pressedLeftBumper()) {
             if (leftBumperJustPressed) { // and now is not
                 println("Autonomous  let go")

@@ -48,7 +48,7 @@ class CommandList : Command {
         return this
     }
 
-    override fun cleanUp(dt:Double) {
+    override fun cleanUp(dt: Double) {
 
     }
 

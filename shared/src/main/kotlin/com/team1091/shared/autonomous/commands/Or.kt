@@ -31,7 +31,7 @@ class Or : Command {
         return this
     }
 
-    override fun cleanUp(dt:Double) {
+    override fun cleanUp(dt: Double) {
         commands.forEach { it.cleanUp(dt) }
     }
 

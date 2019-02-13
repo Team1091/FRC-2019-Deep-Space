@@ -13,7 +13,7 @@ class ReleaseDisk(val grabberSystem: GrabberSystem) : Command {
         return null
     }
 
-    override fun cleanUp(dt:Double) {
+    override fun cleanUp(dt: Double) {
     }
 
 }

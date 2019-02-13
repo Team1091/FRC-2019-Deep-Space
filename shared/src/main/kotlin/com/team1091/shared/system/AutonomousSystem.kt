@@ -10,7 +10,7 @@ class AutonomousSystem {
         this.command?.firstRun()
     }
 
-    fun replace(command: Command, dt:Double) {
+    fun replace(command: Command, dt: Double) {
         this.command?.cleanUp(dt)
         command.firstRun()
         this.command = command

@@ -38,7 +38,7 @@ class TurnToTarget(val components: RobotComponents) : Command {
         return this
     }
 
-    override fun cleanUp(dt:Double) {
+    override fun cleanUp(dt: Double) {
         components.driveSystem.arcadeDrive(0.0, 0.0)
 
     }

@@ -8,9 +8,9 @@ interface IGrabberSystem {
     fun closed()
     fun extend()
     fun withdraw()
-    fun isExtended():Boolean
-    fun isOpen():Boolean
+    fun isExtended(): Boolean
+    fun isOpen(): Boolean
     fun getState(): MouthState
     fun readFromController()
-    fun doWork(dt:Double)
+    fun doWork(dt: Double)
 }

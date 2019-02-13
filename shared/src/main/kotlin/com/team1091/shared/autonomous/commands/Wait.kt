@@ -24,7 +24,7 @@ class Wait(private val components: RobotComponents, private val timeToWait: Time
 
     }
 
-    override fun cleanUp(dt:Double) {
+    override fun cleanUp(dt: Double) {
     }
 
 

@@ -11,7 +11,14 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
-import frc.robot.components.*;
+import frc.robot.components.TargetingSystem;
+import frc.robot.components.WrappedAccelerometer;
+import frc.robot.components.WrappedDrive;
+import frc.robot.components.WrappedEncoder;
+import frc.robot.components.WrappedGyroscope;
+import frc.robot.components.WrappedMotor;
+import frc.robot.components.WrappedSolenoid;
+import frc.robot.components.WrappedXBox;
 
 /**
  * The VM is configured to automatically run this class, and to call the
