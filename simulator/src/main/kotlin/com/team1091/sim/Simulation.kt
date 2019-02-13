@@ -133,7 +133,6 @@ class Simulator : PApplet() {
 
     private fun drawLine(positionSystem: PositionSystem) {
         pushMatrix()
-        // TODO: this goes out of control
         val position = positionSystem.getPos()
         translate(position.x.toFloat(), position.y.toFloat())
         rotate(position.r.toRadians().toFloat())

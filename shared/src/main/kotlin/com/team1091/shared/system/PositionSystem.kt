@@ -2,6 +2,7 @@ package com.team1091.shared.system
 
 import com.team1091.shared.components.IAccelerometer
 import com.team1091.shared.components.IGyroscope
+import com.team1091.shared.math.Position
 import com.team1091.shared.math.Rotation
 
 class PositionSystem(
@@ -43,5 +44,3 @@ class PositionSystem(
     fun getPos(): Position = Position(xP, yP, angle)
 
 }
-
-class Position(val x: Double, val y: Double, val r: Rotation)
