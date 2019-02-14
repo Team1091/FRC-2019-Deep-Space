@@ -12,7 +12,7 @@ class GrabberSystem(
 ) : IGrabberSystem {
 
     var targetState = MouthState.S4WithdrawnOpen
-    var lastRanWork = 0.000000000
+    var lastRanWork = 0.0
     var manualDiscPlaceStarted = false
     var manualDiscPlaceComplete = false
     var manualDiscRetrieveStarted = false
@@ -101,8 +101,8 @@ class GrabberSystem(
         manualDiscPlaceComplete = false
         manualDiscRetrieveStarted = false
         manualDiscRetrieveComplete = false
-        targetState = MouthState.S4WithdrawnOpen;
-    };
+        targetState = MouthState.S4WithdrawnOpen
+    }
 
     override fun doWork(dt: Double) {
         if (lastRanWork + RobotSettings.grabberDelay > dt) {
