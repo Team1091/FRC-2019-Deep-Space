@@ -35,6 +35,8 @@ class TeamRobotImpl(
         )
 
         components.targetingSystem.start()
+        components.grabberSystem.withdraw();
+        components.grabberSystem.open();
     }
 
     override fun autonomousInit() {

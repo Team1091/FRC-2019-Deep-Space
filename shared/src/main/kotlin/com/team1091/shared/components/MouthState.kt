@@ -21,17 +21,17 @@ enum class MouthState(
                 S1ExtendedClose
             },
             gotoWithdrawnOpen = { grabberSystem ->
-                if (grabberSystem.isOpen()) {
-                    grabberSystem.withdraw()
-                } else {
+                if (grabberSystem.isPerformingGrab()) {
                     grabberSystem.open()
+                } else {
+                    grabberSystem.withdraw()
                 }
                 S1ExtendedClose
             }
     ),
     S2ExtendedOpen(
             gotoExtendedClosed = { grabberSystem ->
-                grabberSystem.open()
+                grabberSystem.closed()
                 S2ExtendedOpen
             },
             gotoExtendedOpen = {

@@ -13,4 +13,5 @@ interface IGrabberSystem {
     fun getState(): MouthState
     fun readFromController()
     fun doWork(dt: Double)
+    fun isPerformingGrab() : Boolean
 }

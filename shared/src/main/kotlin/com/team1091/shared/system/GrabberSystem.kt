@@ -18,20 +18,24 @@ class GrabberSystem(
     var manualDiscRetrieveStarted = false
     var manualDiscRetrieveComplete = false
 
+    override fun isPerformingGrab():Boolean{
+        return manualDiscRetrieveStarted;
+    }
+
     override fun isExtended(): Boolean {
         return extenderSolenoid.get() == true
     }
 
     override fun isOpen(): Boolean {
-        return grabberSolenoid.get() == true
+        return grabberSolenoid.get() == false
     }
 
     override fun open() {
-        grabberSolenoid.set(true)
+        grabberSolenoid.set(false)
     }
 
     override fun closed() {
-        grabberSolenoid.set(false)
+        grabberSolenoid.set(true)
     }
 
     override fun extend() {
@@ -56,35 +60,37 @@ class GrabberSystem(
     }
 
     override fun readFromController() {
-        var currentState = getState()
+        val currentState = getState()
         if (controller.pressedX()) {
-            if (!manualDiscPlaceComplete) {
+            if (manualDiscPlaceComplete) {
                 return
             }
             //Place Disc
             if (!manualDiscPlaceStarted) {
                 targetState = MouthState.S4WithdrawnOpen
                 manualDiscPlaceStarted = true
+                return
             }
             if (currentState == MouthState.S4WithdrawnOpen) {
                 targetState = MouthState.S1ExtendedClose
                 return
             }
             if (currentState == MouthState.S1ExtendedClose) {
-                targetState = MouthState.S3WithdrawnClose
+                targetState = MouthState.S4WithdrawnOpen
                 manualDiscPlaceComplete = true
                 return
             }
             return
         }
         if (controller.pressedY()) {
-            if (!manualDiscRetrieveComplete) {
+            if (manualDiscRetrieveComplete) {
                 return
             }
             //Retrieve Disc
             if (!manualDiscRetrieveStarted) {
-                currentState = MouthState.S3WithdrawnClose
+                targetState = MouthState.S3WithdrawnClose
                 manualDiscRetrieveStarted = true
+                return;
             }
             if (currentState == MouthState.S3WithdrawnClose) {
                 targetState = MouthState.S2ExtendedOpen
@@ -105,16 +111,20 @@ class GrabberSystem(
     }
 
     override fun doWork(dt: Double) {
-        if (lastRanWork + RobotSettings.grabberDelay > dt) {
+        if (lastRanWork < RobotSettings.grabberDelay) {
+            lastRanWork += dt
             return
         }
-        var currentState = getState()
+        val currentState = getState()
+        //println(currentState.toString())
+        //println("Grabber is: " + isOpen())
+        //println("Extendr is: " + isExtended())
         when (targetState) {
             MouthState.S1ExtendedClose -> currentState.gotoExtendedClosed(this)
             MouthState.S2ExtendedOpen -> currentState.gotoExtendedOpen(this)
             MouthState.S3WithdrawnClose -> currentState.gotoWithdrawnClosed(this)
-            MouthState.S4WithdrawnOpen -> currentState.gotoWithdrawnClosed(this)
+            MouthState.S4WithdrawnOpen -> currentState.gotoWithdrawnOpen(this)
         }
-        lastRanWork = dt
+        lastRanWork = 0.0
     }
 }
