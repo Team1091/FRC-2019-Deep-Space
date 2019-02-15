@@ -4,13 +4,13 @@ import com.team1091.shared.components.IGameController
 import com.team1091.shared.components.IMotorController
 
 
-class KickstandSystem(val drive: IMotorController, val controller: IGameController) {
+class KickstandSystem(val kickstandMotor: IMotorController, val controller: IGameController) {
 
     var kickstandPower = 0.0
 
 
     fun liftAndStand() {
-        drive.set(kickstandPower)
+        kickstandMotor.set(kickstandPower)
         kickstandPower = 0.0
     }
 

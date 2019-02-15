@@ -4,4 +4,6 @@ interface IAccelerometer {
     fun getX(): Double
     fun getY(): Double
     fun getZ(): Double
+    fun getAngle(): Double
+    fun writeOutData()
 }

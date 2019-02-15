@@ -8,6 +8,13 @@ class SimAccelerometer(
         private var y: Double = 0.0,
         private var z: Double = -1.0
 ) : IAccelerometer {
+    override fun writeOutData() {
+
+    }
+
+    override fun getAngle(): Double {
+        return 0.0;
+    }
 
     override fun getX(): Double = x
     override fun getY(): Double = y

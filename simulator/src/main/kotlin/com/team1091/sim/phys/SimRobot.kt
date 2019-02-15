@@ -13,7 +13,7 @@ class SimRobot(
         val ySize: Float,
 
         val teamRobot: TeamRobot,
-        // we need to read the drive instructions out to simulate them.
+        // we need to read the kickstandMotor instructions out to simulate them.
         val rc: RobotComponents
 ) {
     lateinit var body: Body

@@ -158,7 +158,7 @@ class SimWorld(
 
         val invertedDt = 1f / dt.toFloat()
 
-        // TODO: add each robot's drive's acceleration
+        // TODO: add each robot's kickstandMotor's acceleration
         for (robot in robots) {
             val drive = (robot.rc.driveSystem.drive as SimDrive)
             drive.applyForce(robot.body)

@@ -2,6 +2,7 @@ package frc.robot;
 
 //import com.kauailabs.navx.frc.AHRS;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.team1091.shared.control.RobotComponents;
 import com.team1091.shared.control.TeamRobot;
 import com.team1091.shared.control.TeamRobotImpl;
@@ -9,6 +10,7 @@ import com.team1091.shared.game.StartingPos;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Victor;
 import frc.robot.components.TargetingSystem;
@@ -43,7 +45,7 @@ public class Robot extends TimedRobot {
                         ),
                         new WrappedEncoder(3, 4),
                         new WrappedEncoder(5, 6),
-                        new WrappedAccelerometer(),
+                        new WrappedAccelerometer(new AHRS(SPI.Port.kMXP)),
                         new WrappedGyroscope(),
                         new WrappedMotor(
                                 new Victor(2) // Lift Motor

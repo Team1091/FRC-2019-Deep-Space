@@ -12,6 +12,7 @@ import com.team1091.shared.math.feet
 import com.team1091.shared.math.inches
 import com.team1091.shared.math.squareACircle
 import com.team1091.shared.system.PositionSystem
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 
 
 // This controls our robot in both the sim and real life
@@ -137,6 +138,7 @@ class TeamRobotImpl(
         }
     }
 
+    var lastRunWork = 0.0;
     override fun teleopPeriodic() {
         val dt = getTime()
         components.positionSystem.integrate(dt)
@@ -144,6 +146,7 @@ class TeamRobotImpl(
         doTeleopPeriodicManual(dt)
         components.kickstandsystem.liftAndStand()
         components.driveSystem.drive(dt)
+        components.accelerometer.writeOutData()
     }
 
     override fun disabledInit() {
