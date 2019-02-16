@@ -108,12 +108,16 @@ fun main(args: Array<String>) {
     // http://laptop-1091.local:4567/center
 }
 
+//val pixelRange = 0..
+
 fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
 
     val outputImage = BufferedImage(
             inputImage.width, inputImage.height,
             BufferedImage.TYPE_INT_RGB
     )
+
+    val pixelRange = ((0.2 * inputImage.height).toInt())..((0.8 * inputImage.height).toInt())
 
     var xSum: Long = 0
     var ySum: Long = 0
@@ -124,7 +128,10 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
         for (y in 0 until inputImage.height) {
 
             val rgb = inputImage.getRGB(x, y)
-
+            if(y !in pixelRange){
+                outputImage.setRGB(x, y, rgb)
+                continue
+            }
             // Extract color channels 0-255.
             val r = rgb shr 16 and 0x000000FF
             val g = rgb shr 8 and 0x000000FF
