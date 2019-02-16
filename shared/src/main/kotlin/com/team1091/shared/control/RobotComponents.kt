@@ -15,7 +15,7 @@ import com.team1091.shared.system.KickstandSystem
 import com.team1091.shared.system.PositionSystem
 
 // Put all the robot's components in here, and we can pass it around.
-class RobotComponents(
+open class RobotComponents(
         val gameController: IGameController,
         drive: IDrive,
         val leftEncoder: IEncoder,
@@ -27,7 +27,7 @@ class RobotComponents(
         extenderSolenoid: ISolenoid,
         val targetingSystem: ITargetingSystem
 ) {
-    val driveSystem = DriveSystem(drive)
+    open val driveSystem = DriveSystem(drive)
     val kickstandsystem = KickstandSystem(kickstandMotor, gameController)
     val autonomousSystem = AutonomousSystem()
     val grabberSystem = GrabberSystem(grabberSolenoid, extenderSolenoid, gameController)

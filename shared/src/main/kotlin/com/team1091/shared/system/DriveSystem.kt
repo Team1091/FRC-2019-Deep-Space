@@ -7,7 +7,7 @@ import kotlin.math.min
 
 const val maxAccel = 6.0
 
-class DriveSystem(val drive: IDrive) {
+open class DriveSystem(val drive: IDrive) {
     private var targForwardAmnt = 0.0
     private var targTurnAmnt = 0.0
     private var currentPower = 0.0
