@@ -2,6 +2,7 @@ package com.team1091.shared.autonomous.commands
 
 import com.team1091.shared.components.RobotSettings
 import com.team1091.shared.control.RobotComponents
+import com.team1091.shared.math.clamp
 
 class TurnToTarget(val components: RobotComponents) : Command {
 
@@ -32,7 +33,12 @@ class TurnToTarget(val components: RobotComponents) : Command {
 
         components.driveSystem.arcadeDrive(
                 0.0,
-                if (turn.center < 0) -0.65 else 0.65
+                if (Math.abs(turn.center) < 0.05){
+                    0.0
+                }
+                else if (turn.center < 0) {
+                    clamp(turn.center * 2, -0.65, -0.3)
+                } else clamp(turn.center * 2, 0.3, 0.65)
         )
 
         return this

@@ -37,7 +37,10 @@ class DriveToTarget(val components: RobotComponents) : Command {
                 RobotSettings.driveToMotorPower
         )
 
-        val turnComponent = if (turn.center < 0) -0.4 else 0.4
+        val turnComponent =
+                if (Math.abs(turn.center) < 0.05) 0.0
+                else if (turn.center < 0) clamp(turn.center * 2, -0.4, -0.2)
+                else clamp(turn.center * 2, 0.2, 0.4)
 
         components.driveSystem.arcadeDrive(
                 forwardComponent,
