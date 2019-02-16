@@ -15,10 +15,10 @@ class Wait(private val components: RobotComponents, private val timeToWait: Time
 
     override fun execute(dt: Double): Command? {
 
-        if (System.currentTimeMillis() - start.ms > timeToWait.ms) {
-            return null
+        return if (System.currentTimeMillis() - start.ms > timeToWait.ms) {
+            null
         } else {
-            return this
+            this
         }
 
 

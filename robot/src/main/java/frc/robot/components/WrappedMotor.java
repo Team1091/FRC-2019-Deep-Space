@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Victor;
 
 public class WrappedMotor implements IMotorController {
 
-    Victor victor;
+    private final Victor victor;
 
     public WrappedMotor(Victor victor) {
         this.victor = victor;

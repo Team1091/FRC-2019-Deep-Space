@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class WrappedSolenoid implements ISolenoid {
 
-    private DoubleSolenoid solenoid;
+    private final DoubleSolenoid solenoid;
 
     public WrappedSolenoid(DoubleSolenoid solenoid) {
         this.solenoid = solenoid;

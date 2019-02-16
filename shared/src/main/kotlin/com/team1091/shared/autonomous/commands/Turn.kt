@@ -22,14 +22,14 @@ class Turn(val components: RobotComponents, turnDegrees: Rotation) : Command {
 
         val difference = Math.abs(rtix - ltix) / 2.0 // ticks per degree
 
-        if (difference > requiredTurnDistance) {
+        return if (difference > requiredTurnDistance) {
             // We have turned far enough, we are done
             components.driveSystem.arcadeDrive(0.0, 0.0)
-            return null
+            null
 
         } else {
             components.driveSystem.arcadeDrive(0.0, if (isTurnRight) 1.0 else -1.0)
-            return this
+            this
         }
 
     }

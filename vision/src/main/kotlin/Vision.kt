@@ -191,7 +191,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     /*
     * distance(mm) = (focal length (mm) * real height of the object (mm) * camera frame height in device (pixels) ) / ( image height (pixels) * sensor height (mm))
     * */
-    //In Millimeters - Vaues for C270 web cam
+    //In Millimeters - Values for C270 web cam
     val focalLength = 4.2
     val targetPhysicalHeight = 279.4 //11in
     val cameraFrameHeight = inputImage.height

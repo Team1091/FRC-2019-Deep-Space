@@ -12,11 +12,11 @@ import java.net.URL;
 
 public class TargetingSystem implements ITargetingSystem {
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
     private URL visionURL;
     private ImageInfo imageInfo = new ImageInfo();
 
-    private Runnable visionUpdater = () -> {
+    private final Runnable visionUpdater = () -> {
         while (true) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(visionURL.openStream()))) {
                 imageInfo = gson.fromJson(in.readLine(), ImageInfo.class);
@@ -48,8 +48,7 @@ public class TargetingSystem implements ITargetingSystem {
 
     @Override
     public void start() {
-
-        //thread.start();
+        thread.start();
     }
 
 }
