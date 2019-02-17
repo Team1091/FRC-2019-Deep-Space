@@ -37,7 +37,7 @@ public class TargetingSystem implements ITargetingSystem {
 
     public TargetingSystem() {
         try {
-            visionURL = new URL("http://10.10.91.162:4567/center");
+            visionURL = new URL("http://169.254.152.146:4567/center");
         } catch (Exception e) {
             e.printStackTrace();
         }

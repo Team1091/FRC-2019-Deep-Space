@@ -146,7 +146,6 @@ class TeamRobotImpl(
         doTeleopPeriodicManual(dt)
         components.kickstandsystem.liftAndStand()
         components.driveSystem.drive(dt)
-        components.accelerometer.writeOutData()
     }
 
     override fun disabledInit() {
@@ -166,7 +165,6 @@ class TeamRobotImpl(
     override fun testPeriodic() {
         val dt = getTime()
         components.positionSystem.integrate(dt)
-
     }
 
 
