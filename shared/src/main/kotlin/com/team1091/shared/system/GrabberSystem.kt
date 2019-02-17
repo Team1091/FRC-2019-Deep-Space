@@ -59,48 +59,55 @@ class GrabberSystem(
         return MouthState.S4WithdrawnOpen
     }
 
-    override fun readFromController() {
+    fun placeDisk() {
         val currentState = getState()
+        if (manualDiscPlaceComplete) {
+            return
+        }
+        //Place Disc
+        if (!manualDiscPlaceStarted) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscPlaceStarted = true
+            return
+        }
+        if (currentState == MouthState.S4WithdrawnOpen) {
+            targetState = MouthState.S1ExtendedClose
+            return
+        }
+        if (currentState == MouthState.S1ExtendedClose) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscPlaceComplete = true
+            return
+        }
+    }
+    fun retreiveDisk() {
+        val currentState = getState()
+        if (manualDiscRetrieveComplete) {
+            return
+        }
+        //Retrieve Disc
+        if (!manualDiscRetrieveStarted) {
+            targetState = MouthState.S3WithdrawnClose
+            manualDiscRetrieveStarted = true
+            return;
+        }
+        if (currentState == MouthState.S3WithdrawnClose) {
+            targetState = MouthState.S2ExtendedOpen
+            return
+        }
+        if (currentState == MouthState.S2ExtendedOpen) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscRetrieveComplete = true
+            return
+        }
+    }
+    override fun readFromController() {
         if (controller.pressedX()) {
-            if (manualDiscPlaceComplete) {
-                return
-            }
-            //Place Disc
-            if (!manualDiscPlaceStarted) {
-                targetState = MouthState.S4WithdrawnOpen
-                manualDiscPlaceStarted = true
-                return
-            }
-            if (currentState == MouthState.S4WithdrawnOpen) {
-                targetState = MouthState.S1ExtendedClose
-                return
-            }
-            if (currentState == MouthState.S1ExtendedClose) {
-                targetState = MouthState.S4WithdrawnOpen
-                manualDiscPlaceComplete = true
-                return
-            }
+            placeDisk()
             return
         }
         if (controller.pressedY()) {
-            if (manualDiscRetrieveComplete) {
-                return
-            }
-            //Retrieve Disc
-            if (!manualDiscRetrieveStarted) {
-                targetState = MouthState.S3WithdrawnClose
-                manualDiscRetrieveStarted = true
-                return;
-            }
-            if (currentState == MouthState.S3WithdrawnClose) {
-                targetState = MouthState.S2ExtendedOpen
-                return
-            }
-            if (currentState == MouthState.S2ExtendedOpen) {
-                targetState = MouthState.S4WithdrawnOpen
-                manualDiscRetrieveComplete = true
-                return
-            }
+            retreiveDisk()
             return
         }
         manualDiscPlaceStarted = false

@@ -18,7 +18,10 @@ public class TargetingSystem implements ITargetingSystem {
 
     private final Runnable visionUpdater = () -> {
         while (true) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(visionURL.openStream()))) {
+            try (
+                    InputStreamReader isr = new InputStreamReader(visionURL.openStream());
+                    BufferedReader in = new BufferedReader(isr)
+            ) {
                 imageInfo = gson.fromJson(in.readLine(), ImageInfo.class);
 //                System.out.println("Vision: " + imageInfo.center);
                 Thread.sleep(100);
@@ -34,7 +37,7 @@ public class TargetingSystem implements ITargetingSystem {
 
     public TargetingSystem() {
         try {
-            visionURL = new URL("http://10.10.91.75:4567/center");
+            visionURL = new URL("http://10.10.91.162:4567/center");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,7 +51,7 @@ public class TargetingSystem implements ITargetingSystem {
 
     @Override
     public void start() {
-        thread.start();
+      //  thread.start();
     }
 
 }
