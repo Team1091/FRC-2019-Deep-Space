@@ -10,7 +10,7 @@ class TurnToAngle(val components: RobotComponents, val positionSystem: PositionS
 //    private val isTurnRight: Boolean = turnDegrees.toRadians() > 0
 
     override fun firstRun() {
-        println("Turn Starting")
+        //println("Turn Starting")
     }
 
 
@@ -50,8 +50,8 @@ class TurnToAngle(val components: RobotComponents, val positionSystem: PositionS
     }
 
     override fun cleanUp(dt: Double) {
-        println("Turn Done")
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        //println("Turn Done")
+       // components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 }

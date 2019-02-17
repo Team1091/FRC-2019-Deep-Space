@@ -9,7 +9,7 @@ class Turn(val components: RobotComponents, turnDegrees: Rotation) : Command {
     private val isTurnRight: Boolean = turnDegrees.toRadians() > 0
 
     override fun firstRun() {
-        println("Turn Starting")
+       // println("Turn Starting")
         components.leftEncoder.reset()
         components.rightEncoder.reset()
     }
@@ -35,8 +35,8 @@ class Turn(val components: RobotComponents, turnDegrees: Rotation) : Command {
     }
 
     override fun cleanUp(dt: Double) {
-        println("Turn Done")
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        //println("Turn Done")
+        // components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 //    override fun getMessage(): String =

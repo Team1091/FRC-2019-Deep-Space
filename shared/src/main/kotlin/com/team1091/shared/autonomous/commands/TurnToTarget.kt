@@ -29,7 +29,7 @@ class TurnToTarget(val components: RobotComponents) : Command {
 
 
         // if we get to this point, we see the target
-        println("Turn $turn")
+        //println("Turn $turn")
 
         components.driveSystem.arcadeDrive(
                 0.0,
@@ -45,7 +45,7 @@ class TurnToTarget(val components: RobotComponents) : Command {
     }
 
     override fun cleanUp(dt: Double) {
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        //components.driveSystem.arcadeDrive(0.0, 0.0)
 
     }
 

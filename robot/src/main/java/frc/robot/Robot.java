@@ -63,12 +63,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-//        camera.setExposureAuto();
-
-        camera.setBrightness(20);
-        camera.setExposureManual(20);
-        camera.setWhiteBalanceManual(50);
+        // TODO uncomment
+//        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+//        camera.setBrightness(20);
+//        camera.setExposureManual(20);
+//        camera.setWhiteBalanceManual(50);
 
         StartingPos pos = StartingPos.BLUE_1;
         teamRobot.robotInit(pos);

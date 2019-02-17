@@ -31,7 +31,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
 
 
         // if we get to this point, we see the target
-        println("Turn $turn")
+        //println("Turn $turn")
         val forwardComponent = clamp(turn.distance / RobotSettings.distanceCoeffecient,
                 RobotSettings.driveToMinMotorPower,
                 RobotSettings.driveToMotorPower
@@ -52,7 +52,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
     }
 
     override fun cleanUp(dt: Double) {
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        //components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 }

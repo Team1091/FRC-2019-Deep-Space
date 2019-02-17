@@ -10,7 +10,7 @@ class Wait(private val components: RobotComponents, private val timeToWait: Time
     override fun firstRun() {
         start = Time.now()
 
-        println("Waiting")
+       // println("Waiting")
     }
 
     override fun execute(dt: Double): Command? {

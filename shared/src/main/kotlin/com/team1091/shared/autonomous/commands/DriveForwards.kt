@@ -11,7 +11,7 @@ open class DriveForwards(
     private val forwards: Boolean = distance.distance >= 0
 
     override fun firstRun() {
-        println("Drive Starting")
+        //println("Drive Starting")
         components.leftEncoder.reset()
     }
 
@@ -37,8 +37,8 @@ open class DriveForwards(
     }
 
     override fun cleanUp(dt: Double) {
-        println("Drive Cleaning")
-        components.driveSystem.arcadeDrive(0.0, 0.0)
+        //println("Drive Cleaning")
+      //  components.driveSystem.arcadeDrive(0.0, 0.0)
     }
 
 //    override fun getMessage(): String =
