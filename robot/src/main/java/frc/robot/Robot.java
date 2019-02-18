@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
                         ),
                         new WrappedEncoder(3, 4),
                         new WrappedEncoder(5, 6),
-                        new WrappedAccelerometer(new AHRS(SPI.Port.kMXP)),
-                        new WrappedGyroscope(),
+//                        new WrappedAccelerometer(new AHRS(SPI.Port.kMXP)),
+//                        new WrappedGyroscope(),
                         new WrappedMotor(
                                 new Victor(2) // Lift Motor
                         ),

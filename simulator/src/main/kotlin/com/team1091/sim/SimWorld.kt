@@ -163,17 +163,17 @@ class SimWorld(
             val drive = (robot.rc.driveSystem.drive as SimDrive)
             drive.applyForce(robot.body)
 
-            val accelerometer = robot.rc.accelerometer as SimAccelerometer
+//            val accelerometer = robot.rc.accelerometer as SimAccelerometer
 
             val vel = robot.body.linearVelocity
-            val acceleration = vel.sub(robot.lastVelocity).mul(invertedDt)
+//            val acceleration = vel.sub(robot.lastVelocity).mul(invertedDt)
             robot.lastVelocity.set(vel)
 
-            accelerometer.set(acceleration.x, acceleration.y, -1f)
+//            accelerometer.set(acceleration.x, acceleration.y, -1f)
 
-            val gyro = (robot.rc.gyroscope as SimGyroscope)
-            val rv = robot.body.angularVelocity
-            gyro.add((rv * dt).radians)
+//            val gyro = (robot.rc.gyroscope as SimGyroscope)
+//            val rv = robot.body.angularVelocity
+//            gyro.add((rv * dt).radians)
 
         }
 
