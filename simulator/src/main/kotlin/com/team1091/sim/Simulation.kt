@@ -122,7 +122,7 @@ class Simulator : PApplet() {
         // Draw all the robots
         for (robot in simWorld.robots) {
             draw(robot.body, robot.xSize, robot.ySize, robot.startingPos.alliance.color, true)
-            drawLine(((robot.teamRobot as TeamRobotImpl)).components.positionSystem)
+//            drawLine(((robot.teamRobot as TeamRobotImpl)).components.positionSystem)
         }
 
         popMatrix()

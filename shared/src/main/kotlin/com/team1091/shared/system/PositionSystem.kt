@@ -20,7 +20,7 @@ class PositionSystem(
 ) {
 
     fun integrate(dt: Double) {
-
+        return
         // gyroscope already handles integration
         angle = initialAngle + gyroscope.get()
 
