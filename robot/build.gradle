@@ -51,6 +51,7 @@ dependencies {
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'
 
+    compile "com.sparkjava:spark-core:2.7.1"
     compile project(":shared")
 }
 
