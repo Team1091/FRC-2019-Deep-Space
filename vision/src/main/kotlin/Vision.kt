@@ -3,15 +3,15 @@ import com.github.sarxos.webcam.WebcamPanel
 import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode
-import com.google.gson.Gson
+import kotlinx.coroutines.runBlocking
 import spark.Spark.exception
-import spark.Spark.get
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.File
 import java.lang.Double.min
+import java.net.URL
 import java.text.DecimalFormat
 import javax.imageio.ImageIO
 import javax.swing.JFrame
@@ -20,14 +20,14 @@ import javax.swing.WindowConstants
 
 private val imageInfo = ImageInfo()
 
-private val gson = Gson()
 private val testImage: String? = null // "test.png"
+private val robotAddr = "http://roborio-1091-frc.local" // "http://localhost"//
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>) = runBlocking {
 
     if (args.size != 1) {
         Webcam.setDriver(IpCamDriver())
-        IpCamDeviceRegistry.register("RoboRioCam", "http://roborio-1091-frc.local:1181/stream.mjpg", IpCamMode.PUSH)
+        IpCamDeviceRegistry.register("RoboRioCam", "$robotAddr:1181/stream.mjpg", IpCamMode.PUSH)
     }
 
     val webcams = Webcam.getWebcams()
@@ -54,6 +54,8 @@ fun main(args: Array<String>) {
             imageInfo.seen = targetingOutput.seen
             imageInfo.center = targetingOutput.targetCenter
             imageInfo.distance = min(1000.0, targetingOutput.targetDistanceInches)
+
+            fullSend()
 
             writeToPanel(panel, g2, targetingOutput)
         }
@@ -102,10 +104,27 @@ fun main(args: Array<String>) {
     exception(Exception::class.java) { exception, request, response -> exception.printStackTrace() }
 
     // a little webserver.  Go to http://localhost:4567/center
-    get("/center") { _, _ -> gson.toJson(imageInfo) }
+
+//    port(5801)
+//    get("/center") { req, res ->
+//
+//        imageInfo.seen = req.queryParams("seen").toBoolean()
+//        imageInfo.center = req.queryParams("center").toDouble()
+//        imageInfo.distance = req.queryParams("distance").toDouble()
+//
+//        "ok $imageInfo"
+//    }
 
     // This will be accessed from the robot at
     // http://laptop-1091.local:4567/center
+
+}
+
+fun fullSend() {
+    run {
+        //if its new,
+        URL("$robotAddr:5801/center?seen=${imageInfo.seen}&distance=${imageInfo.distance}&center=${imageInfo.center}").readText()
+    }
 }
 
 //val pixelRange = 0..
@@ -128,7 +147,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
         for (y in 0 until inputImage.height) {
 
             val rgb = inputImage.getRGB(x, y)
-            if(y !in pixelRange){
+            if (y !in pixelRange) {
                 outputImage.setRGB(x, y, rgb)
                 continue
             }
