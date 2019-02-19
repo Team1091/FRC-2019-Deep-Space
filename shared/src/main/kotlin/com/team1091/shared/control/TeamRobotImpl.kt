@@ -20,12 +20,7 @@ class TeamRobotImpl(
     }
 
     override fun autonomousInit() {
-        components.autonomousSystem.init(
-                CommandList(
-                        DriveForwards(components, 20.0.inches)
-                )
-        )
-
+        components.autonomousSystem.init(CommandList())
     }
 
     // since we are driving in autonomous, we should just call teleopPeriodic here

@@ -9,7 +9,10 @@ class ReleaseDisk(val grabberSystem: GrabberSystem) : Command {
     }
 
     override fun execute(dt: Double): Command? {
-        grabberSystem.closed()
+        grabberSystem.placeDisk()
+        if(!grabberSystem.manualDiscPlaceComplete){
+            return this;
+        }
         return null
     }
 

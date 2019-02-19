@@ -8,7 +8,10 @@ class GrabDisk(val grabberSystem: GrabberSystem) : Command {
     }
 
     override fun execute(dt: Double): Command? {
-        grabberSystem.open()
+        grabberSystem.retreiveDisk()
+        if(!grabberSystem.manualDiscRetrieveComplete){
+            return this;
+        }
         return null
     }
 
