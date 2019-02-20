@@ -52,16 +52,7 @@ public class TargetingSystem implements ITargetingSystem {
         exception(Exception.class, (exception, request, response) -> exception.printStackTrace());
 
         get("/center", (req, res) -> {
-            System.out.println("Got Here");
-//            if (req == null) {
-//                System.out.println("Its null");
-//            }
-//            if (req.params() == null) {
-//                System.out.println("Params null");
-//            }
-//            for (String o : req.params().values()) {
-//                System.out.print(o);
-//            }
+//            System.out.println("Got Here");
 
             imageInfo = new ImageInfo(
                     Boolean.parseBoolean(req.queryParams("seen")),

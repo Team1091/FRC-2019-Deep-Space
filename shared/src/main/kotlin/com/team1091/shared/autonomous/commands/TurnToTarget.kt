@@ -7,11 +7,11 @@ import com.team1091.shared.math.clamp
 class TurnToTarget(val components: RobotComponents) : Command {
 
     override fun firstRun() {
-
+        println("Turning to target")
     }
 
     override fun execute(dt: Double): Command? {
-
+        //println("Spam")
         // This will be used for an initial turn in towards the center
 
 
@@ -33,12 +33,18 @@ class TurnToTarget(val components: RobotComponents) : Command {
 
         components.driveSystem.arcadeDrive(
                 0.0,
-                if (Math.abs(turn.center) < 0.05){
+                if (Math.abs(turn.center) < 0.01) {
+                    println("Auto Drive Power: 0")
                     0.0
+                } else if (turn.center < 0) {
+                    var tt = clamp(turn.center * 3, -0.75, -0.6)
+                    println("Auto Drive Power: " + tt)
+                    tt
+                } else {
+                    var ttt = clamp(turn.center * 3, 0.6, 0.75)
+                    println("Auto Drive Power: " + ttt)
+                    ttt
                 }
-                else if (turn.center < 0) {
-                    clamp(turn.center * 2, -0.65, -0.3)
-                } else clamp(turn.center * 2, 0.3, 0.65)
         )
 
         return this

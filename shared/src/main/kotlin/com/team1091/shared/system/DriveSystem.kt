@@ -21,7 +21,7 @@ class DriveSystem(val drive: IDrive) {
         }
 
 
-        val decreaseInTurn = 1 - abs(currentPower) / 2
+        val decreaseInTurn = 1 - (abs(currentPower) / 2)
 
         drive.arcadeDrive(currentPower, targTurnAmnt * decreaseInTurn)
         targForwardAmnt = 0.0

@@ -169,7 +169,7 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     }
 
 
-    val xCenter: Int
+    var xCenter: Int
     val yCenter: Int
 
     var seen = false
@@ -217,11 +217,16 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     val cameraSensorHeight = 2.2
     val targetPixelHeight = pixelSize //How to get?
 
+    val xLeft = xCenter - leftExtension
+    val xRight = xCenter + rightExtension
+    val xCenterAvg = (xLeft + xRight) / 2
+
     return TargetingOutput(
             imageWidth = inputImage.width,
             imageHeight = inputImage.height,
             xCenterColor = xCenter,
             yCenterColor = yCenter,
+            xCenterAvg = xCenterAvg,
             targetDistance = (focalLength * targetPhysicalHeight * cameraFrameHeight) / (targetPixelHeight * cameraSensorHeight),
             processedImage = outputImage,
             seen = seen,
@@ -235,6 +240,7 @@ class TargetingOutput(
         val imageHeight: Int,
         val xCenterColor: Int,
         val yCenterColor: Int,
+        val xCenterAvg: Int,
         var targetDistance: Double,
         val processedImage: BufferedImage,
         val seen: Boolean,
@@ -249,7 +255,7 @@ class TargetingOutput(
      * @return float from -0.5 to 0.5
      */
     val targetCenter: Double
-        get() = xCenterColor.toDouble() / imageWidth.toDouble() - 0.5
+        get() = xCenterAvg.toDouble() / imageWidth.toDouble() - 0.5
 
 
     val targetDistanceInches: Double
@@ -267,6 +273,9 @@ class TargetingOutput(
 
         g.color = drawColor
         g.drawLine(xCenterColor, yCenterColor - 10, xCenterColor, yCenterColor + 10)
+
+        g.color = Color.ORANGE
+        g.drawLine(xCenterAvg, yCenterColor - 5, xCenterAvg, yCenterColor + 5)
 
         if (seen) {
             g.color = Color.YELLOW

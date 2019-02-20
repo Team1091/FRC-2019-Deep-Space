@@ -35,38 +35,46 @@ class TeamRobotImpl(
     private fun doAutonomousScore(dt: Double) {
         if (!components.gameController.pressedRightBumper()) {
             if (rightBumperJustPressed) { // and now is not
+                println("Let Go Right Bumper")
                 components.autonomousSystem.replace(CommandList(), dt) // stops current commands
                 rightBumperJustPressed = false
             }
             return
         }
         if (!rightBumperJustPressed) {
+            println("Pressed Right Bumper")
             components.autonomousSystem.replace(CommandList(
                     TurnToTarget(components),
                     DriveToTarget(components),
                     ReleaseDisk(components.grabberSystem),
-                    DriveBackwards(components, (3).feet)
+                    DriveBackwards(components),
+                    Stop(components)
             ), dt)
         }
+//        println("Started Score")
         rightBumperJustPressed = true
     }
 
     private fun doAutonomousDiskPickup(dt: Double) {
         if (!components.gameController.pressedLeftBumper()) {
             if (leftBumperJustPressed) { // and now is not
+                println("Left Bumper Let go")
                 components.autonomousSystem.replace(CommandList(), dt) // stops current commands
                 leftBumperJustPressed = false
             }
             return
         }
         if (!leftBumperJustPressed) {
+            println("Left bumper pressed")
             components.autonomousSystem.replace(CommandList(
                     TurnToTarget(components),
                     DriveToTarget(components),
                     GrabDisk(components.grabberSystem),
-                    DriveBackwards(components, (3).feet)
+                    DriveBackwards(components),
+                    Stop(components)
             ), dt)
         }
+//        println("Started Pickup")
         leftBumperJustPressed = true
     }
 

@@ -1,7 +1,9 @@
 package com.team1091.shared.autonomous.commands
 
+import com.team1091.shared.components.RobotSettings
 import com.team1091.shared.control.RobotComponents
 import com.team1091.shared.math.Length
+import com.team1091.shared.math.clamp
 
 open class DriveForwards(
         private val components: RobotComponents,
@@ -11,29 +13,10 @@ open class DriveForwards(
     private val forwards: Boolean = distance.distance >= 0
 
     override fun firstRun() {
-        //println("Drive Starting")
-        components.leftEncoder.reset()
     }
 
     override fun execute(dt: Double): Command? {
-
-        if (forwards) {
-            if (components.leftEncoder.get() < distance.toInches()) {
-                components.driveSystem.arcadeDrive(1.0, 0.0)
-                return this
-            }
-            return null
-
-        } else { // backwards
-            if (components.leftEncoder.get() > distance.toInches()) {
-                components.driveSystem.arcadeDrive(-1.0, 0.0)
-                return this
-            }
-            return null
-
-        }
-
-
+        return null
     }
 
     override fun cleanUp(dt: Double) {
