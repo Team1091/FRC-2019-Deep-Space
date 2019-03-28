@@ -1,3 +1,5 @@
+package vision
+
 import com.github.sarxos.webcam.Webcam
 import com.github.sarxos.webcam.WebcamPanel
 import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry
@@ -23,11 +25,13 @@ private val imageInfo = ImageInfo()
 private val testImage: String? = null // "test.png"
 private val robotAddr = "http://roborio-1091-frc.local" // "http://localhost"//
 
+var send = false
 fun main(args: Array<String>) = runBlocking {
 
     if (args.size != 1) {
         Webcam.setDriver(IpCamDriver())
         IpCamDeviceRegistry.register("RoboRioCam", "$robotAddr:1181/stream.mjpg", IpCamMode.PUSH)
+        send = true
     }
 
     val webcams = Webcam.getWebcams()
@@ -35,7 +39,7 @@ fun main(args: Array<String>) = runBlocking {
             .map { it.name }
             .forEachIndexed { i, cam -> println("$i: $cam") }
 
-    val webcam = webcams.last()
+    val webcam = webcams.first()
     webcam.setCustomViewSizes(Dimension(640, 480))
     webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
@@ -108,11 +112,11 @@ fun main(args: Array<String>) = runBlocking {
 //    port(5801)
 //    get("/center") { req, res ->
 //
-//        imageInfo.seen = req.queryParams("seen").toBoolean()
-//        imageInfo.center = req.queryParams("center").toDouble()
-//        imageInfo.distance = req.queryParams("distance").toDouble()
+//        vision.imageInfo.seen = req.queryParams("seen").toBoolean()
+//        vision.imageInfo.center = req.queryParams("center").toDouble()
+//        vision.imageInfo.distance = req.queryParams("distance").toDouble()
 //
-//        "ok $imageInfo"
+//        "ok $vision.imageInfo"
 //    }
 
     // This will be accessed from the robot at
@@ -121,9 +125,11 @@ fun main(args: Array<String>) = runBlocking {
 }
 
 fun fullSend() {
-    run {
-        //if its new,
-        URL("$robotAddr:5801/center?seen=${imageInfo.seen}&distance=${imageInfo.distance}&center=${imageInfo.center}").readText()
+    if (send) {
+        run {
+            //if its new,
+            URL("$robotAddr:5801/center?seen=${imageInfo.seen}&distance=${imageInfo.distance}&center=${imageInfo.center}").readText()
+        }
     }
 }
 
@@ -141,6 +147,8 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
     var xSum: Long = 0
     var ySum: Long = 0
     var totalCount = 0
+
+    val green = hashSetOf<Point>()
 
     // critical code, run on every pixel, every frame
     for (x in 0 until inputImage.width) {
@@ -162,11 +170,14 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
                 ySum += y.toLong()
                 totalCount++
 
+                green.add(Point(x, y))
             } else {
                 outputImage.setRGB(x, y, rgb)
             }
         }
     }
+
+    val blobs = if (green.isEmpty()) listOf() else findCenter(green)
 
 
     var xCenter: Int
