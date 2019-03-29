@@ -17,13 +17,14 @@ import java.text.DecimalFormat
 import javax.imageio.ImageIO
 import javax.swing.JFrame
 import javax.swing.WindowConstants
+import kotlin.math.abs
 
 
 private val imageInfo = ImageInfo()
 
 private val testImage: String? = null // "test.png"
 private val robotAddr = "http://roborio-1091-frc.local" // "http://localhost"//
-
+var remote = false
 fun main(args: Array<String>) = runBlocking {
     var webcam: Webcam? = null
     var connected = false;
@@ -31,11 +32,12 @@ fun main(args: Array<String>) = runBlocking {
         try {
 
             if (args.size != 1) {
+                remote = true
                 Webcam.setDriver(IpCamDriver())
                 var checkServer = IpCamDeviceRegistry.register("RoboRioCamTest", "$robotAddr", IpCamMode.PUSH)
-                while(!checkServer.isOnline){
+                while (!checkServer.isOnline) {
                     println("Waiting on Server")
-                   sleep(250)
+                    sleep(250)
                 }
                 IpCamDeviceRegistry.register("RoboRioCam", "$robotAddr:1181/stream.mjpg", IpCamMode.PUSH)
             }
@@ -142,9 +144,11 @@ fun main(args: Array<String>) = runBlocking {
 }
 
 fun fullSend() {
-    run {
-        //if its new,
-        URL("$robotAddr:5801/center?seen=${imageInfo.seen}&distance=${imageInfo.distance}&center=${imageInfo.center}").readText()
+    if (remote) {
+        run {
+            //if its new,
+            URL("$robotAddr:5801/center?seen=${imageInfo.seen}&distance=${imageInfo.distance}&center=${imageInfo.center}").readText()
+        }
     }
 }
 
@@ -159,14 +163,15 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
 
     val pixelRange = ((0.2 * inputImage.height).toInt())..((0.8 * inputImage.height).toInt())
 
-    var xSum: Long = 0
-    var ySum: Long = 0
-    var totalCount = 0
+    var xSum = 0.0
+    var ySum = 0.0
+    var totalCount = 0.0
 
     // critical code, run on every pixel, every frame
-    for (x in 0 until inputImage.width) {
-        for (y in 0 until inputImage.height) {
 
+    for (y in 0 until inputImage.height) {
+        for (x in 0 until inputImage.width) {
+            val xMult = 1 - abs((x.toDouble() / inputImage.width) - 0.5)
             val rgb = inputImage.getRGB(x, y)
             if (y !in pixelRange) {
                 outputImage.setRGB(x, y, rgb)
@@ -177,11 +182,11 @@ fun process(targetColor: Color, inputImage: BufferedImage): TargetingOutput {
             val g = rgb shr 8 and 0x000000FF
             val b = rgb and 0x000000FF
 
-            if (g > 128 && g > b + 20 && g > r + 20) {
+            if (g > 100 && g > b + 15 && g > r + 15) {
                 outputImage.setRGB(x, y, targetColor.rgb)
-                xSum += x.toLong()
-                ySum += y.toLong()
-                totalCount++
+                xSum += x * xMult
+                ySum += y * xMult
+                totalCount += xMult
 
             } else {
                 outputImage.setRGB(x, y, rgb)
