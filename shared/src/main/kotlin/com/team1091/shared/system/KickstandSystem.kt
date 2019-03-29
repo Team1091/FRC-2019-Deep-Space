@@ -16,8 +16,8 @@ class KickstandSystem(val kickstandMotor: IMotorController, val controller: IGam
 
     fun readFromController() {
         val kickstandPower = when {
-            controller.getStart() -> 0.5
-            controller.getBack() -> -0.5
+            controller.getStart() -> 0.6
+            controller.getBack() -> -0.6
             else -> 0.0
         }
         this.kickstandPower = kickstandPower
