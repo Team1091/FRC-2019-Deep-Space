@@ -17,7 +17,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
 
         // find target - we can get if its seen
         val turn = components.targetingSystem.getCenter()
-        val stoppingDistance = 35
+        val stoppingDistance = 30
 
         // if we don't see the target, then keep waiting until its seen
         if (!turn.seen) {
