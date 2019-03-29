@@ -35,14 +35,14 @@ class TeamRobotImpl(
     private fun doAutonomousScore(dt: Double) {
         if (!components.gameController.pressedRightBumper()) {
             if (rightBumperJustPressed) { // and now is not
-                println("Let Go Right Bumper")
+                //println("Let Go Right Bumper")
                 components.autonomousSystem.replace(CommandList(), dt) // stops current commands
                 rightBumperJustPressed = false
             }
             return
         }
         if (!rightBumperJustPressed) {
-            println("Pressed Right Bumper")
+            //println("Pressed Right Bumper")
             components.autonomousSystem.replace(CommandList(
                     TurnToTarget(components),
                     DriveToTarget(components),
@@ -58,14 +58,14 @@ class TeamRobotImpl(
     private fun doAutonomousDiskPickup(dt: Double) {
         if (!components.gameController.pressedLeftBumper()) {
             if (leftBumperJustPressed) { // and now is not
-                println("Left Bumper Let go")
+                //println("Left Bumper Let go")
                 components.autonomousSystem.replace(CommandList(), dt) // stops current commands
                 leftBumperJustPressed = false
             }
             return
         }
         if (!leftBumperJustPressed) {
-            println("Left bumper pressed")
+            //println("Left bumper pressed")
             components.autonomousSystem.replace(CommandList(
                     TurnToTarget(components),
                     DriveToTarget(components),
@@ -95,6 +95,9 @@ class TeamRobotImpl(
             if (gameController.pressedRightBumper() || gameController.pressedLeftBumper()) {
                 return
             }
+
+           // this.grabberSystem.
+
             // Driving
             val x = gameController.getLeftX()
             val y = gameController.getLeftY()

@@ -80,6 +80,7 @@ class GrabberSystem(
             return
         }
     }
+
     fun retreiveDisk() {
         val currentState = getState()
         if (manualDiscRetrieveComplete) {
