@@ -11,6 +11,7 @@ import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.File
 import java.lang.Double.min
+import java.lang.Thread.sleep
 import java.net.URL
 import java.text.DecimalFormat
 import javax.imageio.ImageIO
@@ -24,20 +25,40 @@ private val testImage: String? = null // "test.png"
 private val robotAddr = "http://roborio-1091-frc.local" // "http://localhost"//
 
 fun main(args: Array<String>) = runBlocking {
+    var webcam: Webcam? = null
+    var connected = false;
+    while (!connected) {
+        try {
 
-    if (args.size != 1) {
-        Webcam.setDriver(IpCamDriver())
-        IpCamDeviceRegistry.register("RoboRioCam", "$robotAddr:1181/stream.mjpg", IpCamMode.PUSH)
+            if (args.size != 1) {
+                Webcam.setDriver(IpCamDriver())
+                var checkServer = IpCamDeviceRegistry.register("RoboRioCamTest", "$robotAddr", IpCamMode.PUSH)
+                while(!checkServer.isOnline){
+                    println("Waiting on Server")
+                   sleep(250)
+                }
+                IpCamDeviceRegistry.register("RoboRioCam", "$robotAddr:1181/stream.mjpg", IpCamMode.PUSH)
+            }
+
+            val webcams = Webcam.getWebcams()
+            webcams
+                    .map { it.name }
+                    .forEachIndexed { i, cam -> println("$i: $cam") }
+
+            webcam = webcams.last()
+
+
+            webcam.setCustomViewSizes(Dimension(640, 480))
+            webcam.viewSize = Dimension(640, 480)
+            connected = webcam.open()
+        } catch (ex: Exception) {
+            println("could not connect")
+            sleep(250)
+        }
     }
 
-    val webcams = Webcam.getWebcams()
-    webcams
-            .map { it.name }
-            .forEachIndexed { i, cam -> println("$i: $cam") }
+    println("connected")
 
-    val webcam = webcams.last()
-    webcam.setCustomViewSizes(Dimension(640, 480))
-    webcam.viewSize = Dimension(640, 480)
     val panel = WebcamPanel(webcam)
 
     panel.painter = object : WebcamPanel.Painter {

@@ -37,12 +37,12 @@ class TurnToTarget(val components: RobotComponents) : Command {
                     println("Auto Drive Power: 0")
                     0.0
                 } else if (turn.center < 0) {
-                    var tt = clamp(turn.center * 3, -0.75, -0.6)
-                    println("Auto Drive Power: " + tt)
+                    var tt = clamp(turn.center * 3, -0.65, -0.55)
+                    //println("Auto Drive Power: " + tt)
                     tt
                 } else {
-                    var ttt = clamp(turn.center * 3, 0.6, 0.75)
-                    println("Auto Drive Power: " + ttt)
+                    var ttt = clamp(turn.center * 3, 0.55, 0.65)
+                    //println("Auto Drive Power: " + ttt)
                     ttt
                 }
         )

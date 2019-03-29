@@ -17,7 +17,7 @@ class DriveToTarget(val components: RobotComponents) : Command {
 
         // find target - we can get if its seen
         val turn = components.targetingSystem.getCenter()
-        val stoppingDistance = 25
+        val stoppingDistance = 35
 
         // if we don't see the target, then keep waiting until its seen
         if (!turn.seen) {
@@ -38,8 +38,8 @@ class DriveToTarget(val components: RobotComponents) : Command {
 
         val turnComponent =
                 if (Math.abs(turn.center) < 0.01) 0.0
-                else if (turn.center < 0) clamp(turn.center * 3, -0.7, -0.5)
-                else clamp(turn.center * 3, 0.5, 0.7)
+                else if (turn.center < 0) clamp(turn.center * 3, -0.4, -0.3)
+                else clamp(turn.center * 3, 0.3, 0.4)
 
         components.driveSystem.arcadeDrive(
                 forwardComponent,

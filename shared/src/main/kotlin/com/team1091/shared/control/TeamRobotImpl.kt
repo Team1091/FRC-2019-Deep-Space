@@ -104,8 +104,7 @@ class TeamRobotImpl(
             } else {
                 driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
             }
-            // TODO: Kickstand commented out
-            //kickstandsystem.readFromController()
+            kickstandsystem.readFromController()
 
             // Grabber
             grabberSystem.readFromController()
@@ -118,8 +117,7 @@ class TeamRobotImpl(
         val dt = getTime()
         doTeleopPeriodicAutonomous(dt)
         doTeleopPeriodicManual(dt)
-        // TODO: kickstand commented out
-        //components.kickstandsystem.liftAndStand()
+        components.kickstandsystem.liftAndStand()
         components.grabberSystem.doWork(dt)
         components.driveSystem.drive(dt)
     }
