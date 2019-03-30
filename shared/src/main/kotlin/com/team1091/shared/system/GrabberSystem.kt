@@ -61,6 +61,50 @@ class GrabberSystem(
         return MouthState.S4WithdrawnOpen
     }
 
+    fun retreiveDisk() {
+        val currentState = getState()
+        if (manualDiscRetrieveComplete) {
+            return
+        }
+        //Retrieve Disc
+        if (!manualDiscRetrieveStarted) {
+            targetState = MouthState.S3WithdrawnClose
+            manualDiscRetrieveStarted = true
+            return;
+        }
+        if (currentState == MouthState.S3WithdrawnClose) {
+            targetState = MouthState.S2ExtendedOpen
+            return
+        }
+        if (currentState == MouthState.S2ExtendedOpen) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscRetrieveComplete = true
+            return
+        }
+    }
+
+    fun placeDisk() {
+        val currentState = getState()
+        if (manualDiscPlaceComplete) {
+            return
+        }
+        //Place Disc
+        if (!manualDiscPlaceStarted) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscPlaceStarted = true
+            return
+        }
+        if (currentState == MouthState.S4WithdrawnOpen) {
+            targetState = MouthState.S1ExtendedClose
+            return
+        }
+        if (currentState == MouthState.S1ExtendedClose) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscPlaceComplete = true
+            return
+        }
+    }
+
     fun manualPlaceDisk() {
         if (manualDiscPlaceComplete) {
             return
