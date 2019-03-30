@@ -179,6 +179,7 @@ class GrabberSystem(
             return
         }
         if (controller.pressedY()) {
+            yWasPressed = true
             manualRetrieveDisk()
             return
         } else if (yWasPressed) {
