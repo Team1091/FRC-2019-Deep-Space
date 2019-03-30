@@ -18,7 +18,7 @@ class GrabberSystem(
     var manualDiscRetrieveStarted = false
     var manualDiscRetrieveComplete = false
 
-    override fun isPerformingGrab():Boolean{
+    override fun isPerformingGrab(): Boolean {
         return manualDiscRetrieveStarted;
     }
 
@@ -81,6 +81,68 @@ class GrabberSystem(
         }
     }
 
+    fun manualPlaceDisk() {
+        val currentState = getState()
+        if (manualDiscPlaceComplete) {
+            return
+        }
+        if (!manualDiscPlaceStarted) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscPlaceStarted = true
+            return
+        }
+        if (currentState == MouthState.S4WithdrawnOpen) {
+            targetState = MouthState.S1ExtendedClose
+            return
+        }
+    }
+
+    fun finishPlaceDisk() {
+        val currentState = getState()
+        if (manualDiscPlaceComplete) {
+            return
+        }
+        if (currentState == MouthState.S1ExtendedClose) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscPlaceComplete = true
+            return
+        }
+    }
+
+    fun manualRetrieveDisk() {
+        val currentState = getState()
+        if (manualDiscRetrieveComplete) {
+            return
+        }
+        if (!manualDiscRetrieveStarted) {
+            targetState = MouthState.S3WithdrawnClose
+            manualDiscRetrieveStarted = true
+            return;
+        }
+        if (currentState == MouthState.S3WithdrawnClose) {
+            targetState = MouthState.S1ExtendedClose
+            return
+        }
+    }
+
+    fun finishRetreiveDisk() {
+        val currentState = getState()
+        if (manualDiscRetrieveComplete) {
+            return
+        }
+
+        if (currentState == MouthState.S1ExtendedClose) {
+            targetState = MouthState.S2ExtendedOpen
+            return
+        }
+
+        if (currentState == MouthState.S2ExtendedOpen) {
+            targetState = MouthState.S4WithdrawnOpen
+            manualDiscRetrieveComplete = true
+            return
+        }
+    }
+
     fun retreiveDisk() {
         val currentState = getState()
         if (manualDiscRetrieveComplete) {
@@ -102,13 +164,26 @@ class GrabberSystem(
             return
         }
     }
+
+    var xWasPressed = false
+    var yWasPressed = false
+
     override fun readFromController() {
         if (controller.pressedX()) {
-            placeDisk()
+            manualPlaceDisk()
+            xWasPressed = true
+            return
+        } else if (xWasPressed) {
+            xWasPressed = false
+            finishPlaceDisk()
             return
         }
         if (controller.pressedY()) {
-            retreiveDisk()
+            manualRetrieveDisk()
+            return
+        } else if (yWasPressed) {
+            yWasPressed = false
+            finishRetreiveDisk()
             return
         }
         manualDiscPlaceStarted = false
