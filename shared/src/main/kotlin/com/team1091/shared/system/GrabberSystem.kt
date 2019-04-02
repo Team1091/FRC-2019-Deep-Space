@@ -115,7 +115,7 @@ class GrabberSystem(
             return
         }
         if (getState() == MouthState.S4WithdrawnOpen) {
-            targetState = MouthState.S1ExtendedClose
+            targetState = MouthState.S2ExtendedOpen
             diskPlaced = true;
             return
         }
@@ -126,6 +126,12 @@ class GrabberSystem(
         if (manualDiscPlaceComplete) {
             return
         }
+
+        if(getState() == MouthState.S2ExtendedOpen){
+            targetState = MouthState.S1ExtendedClose;
+            return;
+        }
+
         if (currentState == MouthState.S1ExtendedClose) {
             targetState = MouthState.S4WithdrawnOpen
             manualDiscPlaceComplete = true
