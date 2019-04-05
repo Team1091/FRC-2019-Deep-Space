@@ -2,16 +2,14 @@ package com.team1091.shared.control
 
 import com.team1091.shared.autonomous.commands.*
 import com.team1091.shared.game.StartingPos
-import com.team1091.shared.math.feet
-import com.team1091.shared.math.inches
 
 // This controls our robot in both the sim and real life
 class TeamRobotImpl(
         val components: RobotComponents
 ) : TeamRobot {
 
-    private var rightBumperJustPressed = false
-    private var leftBumperJustPressed = false
+    private var yJustPressed = false
+    private var xJustPressed = false
 
     override fun robotInit(startingPos: StartingPos) {
         components.targetingSystem.start()
@@ -33,15 +31,15 @@ class TeamRobotImpl(
     }
 
     private fun doAutonomousScore(dt: Double) {
-        if (!components.gameController.pressedRightBumper()) {
-            if (rightBumperJustPressed) { // and now is not
+        if (!components.gameController.pressedX()) {
+            if (yJustPressed) { // and now is not
                 //println("Let Go Right Bumper")
                 components.autonomousSystem.replace(CommandList(), dt) // stops current commands
-                rightBumperJustPressed = false
+                yJustPressed = false
             }
             return
         }
-        if (!rightBumperJustPressed) {
+        if (!yJustPressed) {
             //println("Pressed Right Bumper")
             components.autonomousSystem.replace(CommandList(
                     TurnToTarget(components),
@@ -52,19 +50,19 @@ class TeamRobotImpl(
             ), dt)
         }
 //        println("Started Score")
-        rightBumperJustPressed = true
+        yJustPressed = true
     }
 
     private fun doAutonomousDiskPickup(dt: Double) {
-        if (!components.gameController.pressedLeftBumper()) {
-            if (leftBumperJustPressed) { // and now is not
+        if (!components.gameController.pressedY()) {
+            if (xJustPressed) { // and now is not
                 //println("Left Bumper Let go")
                 components.autonomousSystem.replace(CommandList(), dt) // stops current commands
-                leftBumperJustPressed = false
+                xJustPressed = false
             }
             return
         }
-        if (!leftBumperJustPressed) {
+        if (!xJustPressed) {
             //println("Left bumper pressed")
             components.autonomousSystem.replace(CommandList(
                     TurnToTarget(components),
@@ -75,14 +73,14 @@ class TeamRobotImpl(
             ), dt)
         }
 //        println("Started Pickup")
-        leftBumperJustPressed = true
+        xJustPressed = true
     }
 
     private fun doTeleopPeriodicAutonomous(dt: Double) {
-        if (components.gameController.pressedRightBumper() && components.gameController.pressedLeftBumper()) {
+        if (components.gameController.pressedY() && components.gameController.pressedX()) {
             components.autonomousSystem.replace(CommandList(), dt) // stops current commands
-            rightBumperJustPressed = true
-            leftBumperJustPressed = true
+            yJustPressed = true
+            xJustPressed = true
             return
         }
         doAutonomousDiskPickup(dt)
@@ -92,7 +90,7 @@ class TeamRobotImpl(
 
     private fun doTeleopPeriodicManual(dt: Double) {
         with(components) {
-            if (gameController.pressedRightBumper() || gameController.pressedLeftBumper()) {
+            if (gameController.pressedX() || gameController.pressedY()) {
                 return
             }
 

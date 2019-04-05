@@ -175,14 +175,14 @@ class GrabberSystem(
     }
 
     override fun readFromController() {
-        if (controller.pressedX()) {
+        if (controller.pressedRightBumper()) {
             manualPlaceDisk()
             return
         } else if (diskPlaced && manualDiscPlaceStarted && !manualDiscPlaceComplete) {
             finishPlaceDisk()
             return
         }
-        if (controller.pressedY()) {
+        if (controller.pressedLeftBumper()) {
             manualRetrieveDisk()
             return
         } else if (diskRetrieved && manualDiscRetrieveStarted && !manualDiscRetrieveComplete) {
