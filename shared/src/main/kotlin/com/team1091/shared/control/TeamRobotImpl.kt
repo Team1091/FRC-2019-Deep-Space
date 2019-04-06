@@ -100,7 +100,7 @@ class TeamRobotImpl(
             val x = gameController.getLeftX()
             val y = gameController.getLeftY()
 
-            if (gameController.pressedA()) {
+            if (gameController.pressedA() || gameController.pressedB()) {
                 driveSystem.arcadeDrive(y, 0.7 * x)
             } else {
                 driveSystem.arcadeDrive(0.7 * y, 0.7 * x)

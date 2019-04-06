@@ -25,10 +25,11 @@ class RobotComponents(
         kickstandMotor: IMotorController,
         grabberSolenoid: ISolenoid,
         extenderSolenoid: ISolenoid,
-        val targetingSystem: ITargetingSystem
+        val targetingSystem: ITargetingSystem,
+        val compressor:ICompressor
 ) {
-    val driveSystem = DriveSystem(drive)
-    val kickstandsystem = KickstandSystem(kickstandMotor, gameController)
+    val driveSystem = DriveSystem(drive,gameController)
+    val kickstandsystem = KickstandSystem(kickstandMotor, gameController, compressor)
     val autonomousSystem = AutonomousSystem()
     val grabberSystem = GrabberSystem(grabberSolenoid, extenderSolenoid, gameController)
 //    lateinit var positionSystem: PositionSystem

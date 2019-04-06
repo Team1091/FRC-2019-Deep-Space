@@ -5,13 +5,7 @@ import com.team1091.shared.control.RobotComponents
 import com.team1091.shared.control.TeamRobotImpl
 import com.team1091.shared.game.StartingPos
 import com.team1091.shared.system.PositionSystem
-import com.team1091.sim.components.SimAccelerometer
-import com.team1091.sim.components.SimController
-import com.team1091.sim.components.SimDrive
-import com.team1091.sim.components.SimEncoder
-import com.team1091.sim.components.SimGyroscope
-import com.team1091.sim.components.SimMotor
-import com.team1091.sim.components.SimSolenoid
+import com.team1091.sim.components.*
 import com.team1091.sim.phys.GamePiece
 import com.team1091.sim.phys.Obstacle
 import com.team1091.sim.phys.SimRobot
@@ -48,7 +42,8 @@ class Simulator : PApplet() {
                     SimMotor(),
                     SimSolenoid(),
                     SimSolenoid(),
-                    SimTargetingSystem()
+                    SimTargetingSystem(),
+                    SimCompressor()
             )
 
             SimRobot(start,

@@ -57,7 +57,8 @@ public class Robot extends TimedRobot {
                         new WrappedSolenoid(
                                 new DoubleSolenoid(2, 3) // grabber
                         ),
-                        new TargetingSystem()
+                        new TargetingSystem(),
+                        new WrappedCompressor()
                 )
         );
     }
