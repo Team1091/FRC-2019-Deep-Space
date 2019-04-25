@@ -94,14 +94,14 @@ class TeamRobotImpl(
                 return
             }
 
-           // this.grabberSystem.
+            // this.grabberSystem.
 
             // Driving
             val x = gameController.getLeftX()
             val y = gameController.getLeftY()
 
             if (gameController.pressedA() || gameController.pressedB()) {
-                driveSystem.arcadeDrive(y, 0.7 * x)
+                driveSystem.arcadeDrive(y, x)
             } else {
                 driveSystem.arcadeDrive(0.7 * y, 0.7 * x)
             }
